@@ -9,21 +9,25 @@ arrange_se(.data, arrangeTerms)
 \arguments{
 \item{.data}{data.frame}
 
-\item{arrangeTerms}{character vector of column expressions to group by.}
+\item{arrangeTerms}{character vector of column expressions to arrange by.}
 }
 \value{
 .data grouped by columns named in groupingVars
 }
 \description{
 Arange a data frame by the arrangeTerms.  Accepts arbitrary text as
-arrangeTerms to allow forms such as "desc(gear)".
-Author: John Mount, Win-Vector LLC.
+arrangeTerms to allow forms such as "desc(gear)"
+(unlike \code{\link[dplyr]{arrange_at}}).
 }
 \examples{
 
-arrange_se(datasets::mtcars, c("cyl", "desc(gear)")) \%>\%
+datasets::mtcars \%>\%
+  arrange_se(c("cyl", "desc(gear)")) \%>\%
   head()
 # roughly equivilent to:
 # arrange(datasets::mtcars, cyl, desc(gear)) \%>\% head()
 
+}
+\seealso{
+\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{arrange_at}}
 }

@@ -12,9 +12,9 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-07-14" />
+<meta name="date" content="2017-07-22" />
 
-<title>seplr</title>
+<title>seplyr</title>
 
 
 
@@ -68,103 +68,126 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">seplr</h1>
+<h1 class="title toc-ignore">seplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-07-14</em></h4>
+<h4 class="date"><em>2017-07-22</em></h4>
 
 
 
-<p>The idea is <a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> package lets you program over <code>dplyr</code> 0.7.* without needing a Ph.D. in computer science.</p>
+<p>This document describes the <a href="https://www.r-project.org"><code>R</code></a> package <a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> which supplies <em>s</em>tandard <em>e</em>valuation interfaces for some common <a href="https://CRAN.R-project.org/package=dplyr"><code>dplyr</code></a> verbs. <code>seplyr</code> stands for “standard evaluation dplyr” (“standard” meaning we prefer explicit user provided strings over passive <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation</a> capture of un-evaluated user code) or “string edition dplyr.”</p>
+<p>The idea is this package lets you program over <code>dplyr</code> 0.7.* without needing a Ph.D. in computer science.</p>
 <p>In <code>dplyr</code> if you know the names of columns when you are writing code you can write code such as the following.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
+<span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
+<pre><code>## [1] '0.7.2'</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::mtcars %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(cyl, <span class="kw">desc</span>(gear)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 2 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 3 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 5 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 6 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</code></pre>
+<p>In <code>dplyr</code> <code>0.7.*</code> if the names of the columns are coming from a variable set elsewhere you would to need to use a tool to substitute those names in. One such tool is <code>rlang</code>/<code>tidyeval</code> (though we strongly prefer <a href="https://github.com/WinVector/seplyr/blob/master/README.md"><code>seplyr</code></a> and <a href="https://github.com/WinVector/wrapr/blob/master/README.md"><code>wrapr::let()</code></a>)). <code>rlang</code>/<code>tidyeval</code> works as follows (for comparison only, this is <em>not</em> our suggested workflow).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Assume this is set elsewhere,</span>
+<span class="co"># supplied by a user, function argument, or control file.</span>
+orderTerms &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'cyl'</span>, <span class="st">'desc(gear)'</span>)
+
+<span class="co"># Now convert into splice-able types, the idea is the user</span>
+<span class="co"># supplies variable names that we later convert to &quot;quosures&quot;</span>
+<span class="co"># for use in `dplyr` 0.7.* generic code.</span>
+<span class="co"># This code is near the pipe under the rule:</span>
+<span class="co"># &quot;If you are close enough to form a quosure, </span>
+<span class="co">#  you are close enough to re-code the analysis&quot;</span>
+orderQs &lt;-<span class="st"> </span><span class="kw">lapply</span>(orderTerms,
+                  function(si) { rlang::<span class="kw">parse_expr</span>(si) })
+<span class="co"># pipe</span>
+datasets::mtcars %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(!!!orderQs) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 2 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 3 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 5 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 6 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</code></pre>
+<p>If you don’t want to try and digest entire theory of quasi-quoting and splicing (the <code>!!!</code> operator) then you can use <code>seplyr</code> which conveniently and legibly wraps the operations as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># devtools::install_github('WinVector/seplyr')</span>
+<span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
 
 datasets::mtcars %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(cyl, gear) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange_se</span>(orderTerms) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>## # A tibble: 6 x 11
-## # Groups:   cyl, gear [4]
-##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  21.0     6   160   110  3.90 2.620 16.46     0     1     4     4
-## 2  21.0     6   160   110  3.90 2.875 17.02     0     1     4     4
-## 3  22.8     4   108    93  3.85 2.320 18.61     1     1     4     1
-## 4  21.4     6   258   110  3.08 3.215 19.44     1     0     3     1
-## 5  18.7     8   360   175  3.15 3.440 17.02     0     0     3     2
-## 6  18.1     6   225   105  2.76 3.460 20.22     1     0     3     1</code></pre>
-<p>If instead the names of the columns are coming from a variable set elsewhere you need to use a tool to substitute those names in as show below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">groupingVars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'cyl'</span>, <span class="st">'gear'</span>) <span class="co"># assume this is set elsewhere</span>
-
-datasets::mtcars %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(!!!rlang::<span class="kw">syms</span>(groupingVars)) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>## # A tibble: 6 x 11
-## # Groups:   cyl, gear [4]
-##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  21.0     6   160   110  3.90 2.620 16.46     0     1     4     4
-## 2  21.0     6   160   110  3.90 2.875 17.02     0     1     4     4
-## 3  22.8     4   108    93  3.85 2.320 18.61     1     1     4     1
-## 4  21.4     6   258   110  3.08 3.215 19.44     1     0     3     1
-## 5  18.7     8   360   175  3.15 3.440 17.02     0     0     3     2
-## 6  18.1     6   225   105  2.76 3.460 20.22     1     0     3     1</code></pre>
-<p>If you don’t want to try and digest entire theory of quasi-quoting (the <code>rlang::syms()</code>) and splicing (the <code>!!!</code>) then you can use <code>seplyr</code> which conveniently wraps the operations as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
-
-datasets::mtcars %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by_se</span>(groupingVars) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>## # A tibble: 6 x 11
-## # Groups:   cyl, gear [4]
-##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  21.0     6   160   110  3.90 2.620 16.46     0     1     4     4
-## 2  21.0     6   160   110  3.90 2.875 17.02     0     1     4     4
-## 3  22.8     4   108    93  3.85 2.320 18.61     1     1     4     1
-## 4  21.4     6   258   110  3.08 3.215 19.44     1     0     3     1
-## 5  18.7     8   360   175  3.15 3.440 17.02     0     0     3     2
-## 6  18.1     6   225   105  2.76 3.460 20.22     1     0     3     1</code></pre>
-<p>And that is it. <code>seplyr::group_by_se()</code> performs the wrapping for you without you having to work through the details of <code>rlang</code>. If you are interested in the details <code>seplyr</code> itself is a good tutorial. For example you can examine <code>seplyr</code>’s implementation to see the necessary notations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(group_by_se)</code></pre></div>
-<pre><code>## function (.data, groupingVars, add = FALSE) 
-## {
-##     groupingSyms &lt;- rlang::syms(groupingVars)
-##     group_by(.data = .data, !(!(!groupingSyms)), add = add)
-## }
-## &lt;bytecode: 0x7fc26bc92ca8&gt;
-## &lt;environment: namespace:seplyr&gt;</code></pre>
-<p>And of course we try to supply some usable help entries, example <code>help(group_by_se)</code>:</p>
-<pre><code>group_by standard interface.
-
-Description
-
- Group a data frame by the groupingVars. Author: John Mount, Win-Vector LLC.
-
-Usage
-
- group_by_se(.data, groupingVars, add = FALSE)
- 
-Arguments
-
- .data  data.frame
- groupingVars   character vector of column names to group by.
- add    logical, passed to group_by
- 
-Value
-
- .data grouped by columns named in groupingVars
-
-Examples
-
- group_by_se(datasets::mtcars, c(&quot;cyl&quot;, &quot;gear&quot;)) %&gt;%
-   head()
- # roughly equivalent to:
- # do.call(group_by_, c(list(datasets::mtcars), c('cyl', 'gear')))</code></pre>
-<p>In addition to a series of adapters we also supply a number of useful new verbs including:</p>
+<pre><code>##    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 2 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 3 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 5 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 6 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</code></pre>
+<p>The idea is: the above code looks very much like simple <code>dplyr</code> code used running an analysis, and yet is very easy to <a href="http://www.win-vector.com/blog/2016/12/parametric-variable-names-and-dplyr/">parameterize</a> and re-use in a script or package.</p>
+<hr />
+<p><code>seplyr::arrange_se()</code> performs the wrapping for you without you having to work through the details of <code>rlang</code>. If you are interested in the details <code>seplyr</code> itself is a good tutorial. For example you can examine <code>seplyr</code>’s implementation to see the necessary notations (using a command such as <code>print(arrange_se)</code>). And, of course, we try to supply some usable help entries, such as: <code>help(arrange_se)</code>. Some more discussion of the ideas can be found <a href="http://www.win-vector.com/blog/2017/07/dplyr-0-7-made-simpler/">here</a>.</p>
+<p>The current set of SE adapters includes (all commands of the form <code>NAME_se()</code> being adapters for a <code>dplyr::NAME()</code> method):</p>
 <ul>
-<li><code>add_group_indices()</code> Adds a column of per-group ids to data.</li>
-<li><code>add_group_summaries()</code> Adds per-group summaries to data.</li>
-<li><code>group_summarize()</code> Binds grouping, arrangement, and summarization together for clear documentation of intent.</li>
+<li><code>add_count_se()</code></li>
+<li><code>add_tally_se()</code></li>
+<li><code>arrange_se()</code></li>
+<li><code>count_se()</code></li>
+<li><code>distinct_se()</code></li>
+<li><code>filter_se()</code></li>
+<li><code>group_by_se()</code></li>
+<li><code>group_indices_se()</code></li>
+<li><code>mutate_se()</code></li>
+<li><code>rename_se()</code></li>
+<li><code>select_se()</code></li>
+<li><code>summarize_se()</code></li>
+<li><code>tally_se()</code></li>
+<li><code>transmute_se()</code></li>
 </ul>
+<p>Only two of the above are completely redundant. <code>seplyr::group_by_se()</code> essentially works as <code>dplyr::group_by_at()</code> and <code>seplyr::select_se()</code> essentially works as <code>dplyr::select_at()</code>. The others either have different semantics or currently (as of <code>dplyr</code> <code>0.7.1</code>) no matching <code>dplyr::*_at()</code> method. Roughly all <code>seplyr</code> is trying to do is give a uniform first-class standard interface to all of the primary deprecated underscore suffixed verbs (such as <code>dplyr::arrange_</code>).</p>
+<p>We also have a few methods that work around a few of the minor inconvenience of working with variable names as strings:</p>
+<ul>
+<li><code>deselect()</code></li>
+<li><code>rename_mp()</code></li>
+</ul>
+<p>For now we are not emphasizing <code>seplyr::mutate_se()</code> and <code>seplyr::summarize_se()</code> as we think in some cases the best ways to work with these verbs may be a combination of their <code>dplyr::*_at()</code> forms plus a <code>seplyr::rename_se()</code>. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::iris %&gt;%
+<span class="st">  </span><span class="kw">group_by_at</span>(<span class="st">&quot;Species&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">c</span>(<span class="st">&quot;Sepal.Length&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>), <span class="kw">funs</span>(mean)) %&gt;%
+<span class="st">  </span><span class="kw">rename_se</span>(<span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> :<span class="er">=</span><span class="st"> &quot;Sepal.Length&quot;</span>, 
+              <span class="st">&quot;Mean.Sepal.Width&quot;</span> :<span class="er">=</span><span class="st"> &quot;Sepal.Width&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##      Species Mean.Sepal.Length Mean.Sepal.Width
+##       &lt;fctr&gt;             &lt;dbl&gt;            &lt;dbl&gt;
+## 1     setosa             5.006            3.428
+## 2 versicolor             5.936            2.770
+## 3  virginica             6.588            2.974</code></pre>
+<p>In the above the <code>rename_se()</code> is simply changing the column names to what we want (because we did not specify this in the <code>summarize_at()</code> step). The <code>:=</code> operator is just a convenience function for building up maps, we could also have used “<code>=</code>” or passed in a named vector built up elsewhere.</p>
+<p>However, we can also perform the above directly with <code>seplyr::summarize_se()</code> as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::iris %&gt;%
+<span class="st">  </span><span class="kw">group_by_se</span>(<span class="st">&quot;Species&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>, 
+                 <span class="st">&quot;Mean.Sepal.Width&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(Sepal.Width)&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##      Species Mean.Sepal.Length Mean.Sepal.Width
+##       &lt;fctr&gt;             &lt;dbl&gt;            &lt;dbl&gt;
+## 1     setosa             5.006            3.428
+## 2 versicolor             5.936            2.770
+## 3  virginica             6.588            2.974</code></pre>
+<p>In addition to the series of adapters we also supply a number of useful new verbs including:</p>
+<ul>
+<li><code>group_summarize()</code> Binds grouping, arrangement, and summarization together for clear documentation of intent.</li>
+<li><code>add_group_summaries()</code> Adds per-group summaries to data.</li>
+<li><code>add_group_indices()</code> Adds a column of per-group ids to data.</li>
+<li><code>add_group_sub_indices()</code> Adds a column of in-group rank ids to data.</li>
+<li><code>add_rank_indices()</code> Adds rank indices to data.</li>
+</ul>
+<p><code>seplyr</code> is designed to be a thin package that passes all work to <code>dplyr</code>. If you want a package that works around <code>dplyr</code> implementation differences on different data sources I suggest trying our own <a href="https://CRAN.R-project.org/package=replyr"><code>replyr</code></a> package. Another alternative is using <a href="https://github.com/WinVector/wrapr/blob/master/README.md"><code>wrapr::let()</code></a>.</p>
+<p>Some inspiration comes from <a href="https://gist.github.com/skranz/9681509">Sebastian Kranz’s <code>s_dplyr</code></a>.</p>
 
 
 

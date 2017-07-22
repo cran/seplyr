@@ -10,7 +10,7 @@
 #' @param d data.frame
 #' @param groupingVars character vector of column names to group by.
 #' @param ... list of dplyr::mutate() expressions.
-#' @param arrangeTerms character vector of column expressions to group by.
+#' @param arrangeTerms character optional vector of column expressions to arrange by.
 #' @return d summarized by groups
 #'
 #' @examples
@@ -39,3 +39,8 @@ group_summarize <- function(d, groupingVars, ...,
   # work around https://github.com/tidyverse/dplyr/issues/2963
   ungroup(ds)
 }
+
+
+#' @rdname group_summarize
+#' @export
+group_summarise <- group_summarize

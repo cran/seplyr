@@ -15,10 +15,16 @@ select_se(.data, colNames)
 .data with only selected columns
 }
 \description{
-select columns.
+select columns.  To remove columns please see \code{\link{deselect}}.
 }
 \examples{
 
-datasets::mtcars \%>\% select_se(c("cyl", "gear")) \%>\% head()
+datasets::mtcars \%>\%
+   select_se(c("cyl", "gear")) \%>\%
+   head()
+# essentially dplyr::select_at()
 
+}
+\seealso{
+\code{\link{deselect}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{select_at}}
 }

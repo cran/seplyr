@@ -9,16 +9,25 @@ rename_se(.data, mapping)
 \arguments{
 \item{.data}{data.frame}
 
-\item{mapping}{named character vector of columns to rename (new news on the left, original names on the right).}
+\item{mapping}{named character vector of columns to rename (new names on the left, original names on the right; this may seem reversed but it matches dplyr::rename()).}
 }
 \value{
 .data with renamed columns
 }
 \description{
-rename columns.
+rename columns (much different syntax than \code{\link[dplyr]{rename_at}}).
 }
 \examples{
 
-datasets::mtcars \%>\% rename_se(c("cylinders" = "cyl", "gears" = "gear")) \%>\% head()
+datasets::mtcars \%>\%
+   rename_se(c("cylinders" := "cyl", "gears" := "gear")) \%>\%
+   head()
+# # sames as:
+# datasets::mtcars \%>\%
+#    rename(cylinders = cyl, gears = gear) \%>\%
+#    head()
 
+}
+\seealso{
+\code{\link{rename_mp}}, \code{\link[dplyr]{rename}},  \code{\link[dplyr]{rename_at}}, \code{\link[seplyr]{:=}}
 }

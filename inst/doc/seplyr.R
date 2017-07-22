@@ -1,24 +1,47 @@
 ## ----ex1a----------------------------------------------------------------
 suppressPackageStartupMessages(library("dplyr"))
+packageVersion("dplyr")
 
 datasets::mtcars %>% 
-  group_by(cyl, gear) %>% 
+  arrange(cyl, desc(gear)) %>% 
   head()
 
 ## ----ex1b----------------------------------------------------------------
-groupingVars <- c('cyl', 'gear') # assume this is set elsewhere
+# Assume this is set elsewhere,
+# supplied by a user, function argument, or control file.
+orderTerms <- c('cyl', 'desc(gear)')
 
+# Now convert into splice-able types, the idea is the user
+# supplies variable names that we later convert to "quosures"
+# for use in `dplyr` 0.7.* generic code.
+# This code is near the pipe under the rule:
+# "If you are close enough to form a quosure, 
+#  you are close enough to re-code the analysis"
+orderQs <- lapply(orderTerms,
+                  function(si) { rlang::parse_expr(si) })
+# pipe
 datasets::mtcars %>% 
-  group_by(!!!rlang::syms(groupingVars)) %>% 
+  arrange(!!!orderQs) %>% 
   head()
 
 ## ----ex1c----------------------------------------------------------------
+# devtools::install_github('WinVector/seplyr')
 library("seplyr")
 
 datasets::mtcars %>% 
-  group_by_se(groupingVars) %>% 
+  arrange_se(orderTerms) %>% 
   head()
 
-## ----pex1d---------------------------------------------------------------
-print(group_by_se)
+## ----atex----------------------------------------------------------------
+datasets::iris %>%
+  group_by_at("Species") %>%
+  summarize_at(c("Sepal.Length", "Sepal.Width"), funs(mean)) %>%
+  rename_se(c("Mean.Sepal.Length" := "Sepal.Length", 
+              "Mean.Sepal.Width" := "Sepal.Width"))
+
+## ----atexse--------------------------------------------------------------
+datasets::iris %>%
+  group_by_se("Species") %>%
+  summarize_se(c("Mean.Sepal.Length" := "mean(Sepal.Length)", 
+                 "Mean.Sepal.Width" := "mean(Sepal.Width)"))
 
