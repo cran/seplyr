@@ -8,6 +8,8 @@ c('a' := 5, 'b' := 6)
 c('a', 'b') := c(5, 6)
 
 ## ----ex2-----------------------------------------------------------------
+suppressPackageStartupMessages(library("dplyr"))
+
 datasets::iris %>%
   summarize_se("Mean_Sepal_Length" := "mean(Sepal.Length)")
 

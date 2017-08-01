@@ -10,8 +10,10 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
 #'
 #' groupingVars = c("cyl", "gear")
+#'
 #' datasets::mtcars %>%
 #'   # dplyr doesn't currently export tibble::rownames_to_column()
 #'   { mutate(., CarName = rownames(.) ) } %>%
@@ -31,7 +33,7 @@ add_group_sub_indices <- function(.data,
                                  groupingVars,
                                  arrangeTerms = NULL,
                                  orderColumn) {
-  .data <- ungroup(.data) # just in case
+  .data <- dplyr::ungroup(.data) # just in case
   if(length(list(...))>0) {
     stop("seplyr::add_group_sub_indices unexpected arguments")
   }
@@ -40,15 +42,19 @@ add_group_sub_indices <- function(.data,
     arrangeTerms <- colnames(.data)
   }
   # from: https://github.com/tidyverse/rlang/issues/116
-  arrangeTerms <- lapply(arrangeTerms,
-                         function(si) { rlang::parse_expr(si) })
-  .data <- arrange(.data, !!!arrangeTerms)
+  env <- parent.frame()
+  arrangeQ <- lapply(arrangeTerms,
+                    function(si) {
+                      rlang::parse_quosure(si,
+                                           env = env)
+                    })
+  .data <-  dplyr::arrange(.data, !!!arrangeQ)
   # add ordered row-ids globally
-  d <- mutate(.data, !!orderColumn := 1 )
-  d <- mutate(d, !!orderColumn := cumsum(!!rlang::sym(orderColumn)) )
+  d <- dplyr::mutate(.data, !!orderColumn := 1 )
+  d <- dplyr::mutate(d, !!orderColumn := cumsum(!!rlang::sym(orderColumn)) )
   # use that to compute grouped ranks
   d <- group_by_se(d, groupingVars)
-  d <- mutate(d, !!orderColumn := rank(!!rlang::sym(orderColumn)) )
-  d <- ungroup(d)
+  d <- dplyr::mutate(d, !!orderColumn := rank(!!rlang::sym(orderColumn)) )
+  d <- dplyr::ungroup(d)
   d
 }

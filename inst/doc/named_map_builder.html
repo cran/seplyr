@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-07-22" />
+<meta name="date" content="2017-08-01" />
 
 <title>Named Map Builder</title>
 
@@ -70,23 +70,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Named Map Builder</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-07-22</em></h4>
+<h4 class="date"><em>2017-08-01</em></h4>
 
 
 
 <p><a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> introduces an operator called “named map builder” that is written as “<code>:=</code>”. Named map builder is a <em>very</em> simple bit of code that performs a very simple task: it adds names to vectors or lists (making them work more like maps).</p>
 <p>Here are some examples:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: dplyr</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">'a'</span> :<span class="er">=</span><span class="st"> </span><span class="dv">5</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
+
+<span class="st">'a'</span> :<span class="er">=</span><span class="st"> </span><span class="dv">5</span></code></pre></div>
 <pre><code>## a 
 ## 5</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">'a'</span> :<span class="er">=</span><span class="st"> </span><span class="dv">5</span>, <span class="st">'b'</span> :<span class="er">=</span><span class="st"> </span><span class="dv">6</span>)</code></pre></div>
@@ -97,7 +89,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 5 6</code></pre>
 <p>The left-side argument of the <code>:=</code> operator is called “the names”, and the right-side argument is called “the values”. The <code>:=</code> operators returns the values with the names set to names.</p>
 <p>A great use of the <code>:=</code> operator is using it to conveniently build arguments lists for functions such as <code>seplyr::mutate_se()</code>. This works for simple explicit code such as the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::iris %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
+
+datasets::iris %&gt;%
 <span class="st">  </span><span class="kw">summarize_se</span>(<span class="st">&quot;Mean_Sepal_Length&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>)</code></pre></div>
 <pre><code>##   Mean_Sepal_Length
 ## 1          5.843333</code></pre>

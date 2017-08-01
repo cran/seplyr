@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-07-22" />
+<meta name="date" content="2017-08-01" />
 
 <title>Using seplyr to Program Over dplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using seplyr to Program Over dplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-07-22</em></h4>
+<h4 class="date"><em>2017-08-01</em></h4>
 
 
 
@@ -80,10 +80,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
 <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
 <pre><code>## [1] '0.7.2'</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(starwars)</code></pre></div>
-<pre><code>##  [1] &quot;name&quot;       &quot;height&quot;     &quot;mass&quot;       &quot;hair_color&quot; &quot;skin_color&quot;
-##  [6] &quot;eye_color&quot;  &quot;birth_year&quot; &quot;gender&quot;     &quot;homeworld&quot;  &quot;species&quot;   
-## [11] &quot;films&quot;      &quot;vehicles&quot;   &quot;starships&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">colnames</span>(starwars), <span class="dt">sep =</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</code></pre></div>
+<pre><code>## name
+## height
+## mass
+## hair_color
+## skin_color
+## eye_color
+## birth_year
+## gender
+## homeworld
+## species
+## films
+## vehicles
+## starships</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(homeworld) %&gt;%
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_height =</span> <span class="kw">mean</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
@@ -117,8 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Replace “<code>=</code>” in expressions with “<code>:=</code>”.</li>
 </ul>
 <p>Our converted code looks like the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># devtools::install_github(&quot;WinVector/seplyr&quot;)</span>
-<span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
 
 starwars %&gt;%
 <span class="st">  </span><span class="kw">group_by_se</span>(<span class="st">&quot;homeworld&quot;</span>) %&gt;%
@@ -177,7 +186,7 @@ starwars %&gt;%
                         value_variables, 
                         <span class="st">&quot;, na.rm = TRUE)&quot;</span>)
   calculation &lt;-<span class="st"> </span>result_names :<span class="er">=</span><span class="st"> </span>expressions
-  <span class="kw">print</span>(calculation) <span class="co"># print for demonstration</span>
+  <span class="kw">print</span>(<span class="kw">as.list</span>(calculation)) <span class="co"># print for demonstration</span>
   data %&gt;%
 <span class="st">    </span><span class="kw">group_by_se</span>(grouping_variables) %&gt;%
 <span class="st">    </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(calculation,
@@ -187,8 +196,11 @@ starwars %&gt;%
 starwars %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">grouped_mean</span>(<span class="dt">grouping_variables =</span> <span class="st">&quot;eye_color&quot;</span>,
                <span class="dt">value_variables =</span> <span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;birth_year&quot;</span>))</code></pre></div>
-<pre><code>##                        mean_mass                  mean_birth_year 
-##       &quot;mean(mass, na.rm = TRUE)&quot; &quot;mean(birth_year, na.rm = TRUE)&quot;</code></pre>
+<pre><code>## $mean_mass
+## [1] &quot;mean(mass, na.rm = TRUE)&quot;
+## 
+## $mean_birth_year
+## [1] &quot;mean(birth_year, na.rm = TRUE)&quot;</code></pre>
 <pre><code>## # A tibble: 15 x 4
 ##        eye_color mean_mass mean_birth_year count
 ##            &lt;chr&gt;     &lt;dbl&gt;           &lt;dbl&gt; &lt;int&gt;
@@ -207,7 +219,43 @@ starwars %&gt;%<span class="st"> </span>
 ## 13       unknown  31.50000             NaN     3
 ## 14         white  48.00000             NaN     1
 ## 15        yellow  81.11111        76.38000    11</code></pre>
-<p>The only part that requires more study and practice was messing around with the expressions using <code>paste()</code> (for more details on the string manipulation please try “<code>help(paste)</code>”). Notice also we used the “<code>:=</code>” operator to bind the list of desired result names to the matching calculations (please see “<code>help(named_map_builder)</code>” for more details).</p>
+<p>The only part that requires more study and practice was messing around with the expressions using <code>paste0()</code> (for more details on the string manipulation please try “<code>help(paste)</code>”). Notice also we used the “<code>:=</code>” operator to bind the list of desired result names to the matching calculations (please see “<code>help(named_map_builder)</code>” for more details).</p>
+<p>We can also use <code>gsub</code> or the <code>glue</code> package for the same effect:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if(<span class="kw">requireNamespace</span>(<span class="st">'glue'</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
+  <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;glue&quot;</span>))
+  
+  grouped_mean &lt;-<span class="st"> </span>function(data, 
+                           grouping_variables, 
+                           value_variables) {
+    data %&gt;%
+<span class="st">      </span><span class="kw">group_by_se</span>(grouping_variables) %&gt;%
+<span class="st">      </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="kw">glue</span>(<span class="st">&quot;mean_{value_variables}&quot;</span>) :<span class="er">=</span><span class="st"> </span>
+<span class="st">                       </span><span class="kw">glue</span>(<span class="st">&quot;mean({value_variables}, na.rm = TRUE)&quot;</span>),
+                     <span class="st">&quot;count&quot;</span> :<span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
+  }
+  
+  starwars %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">grouped_mean</span>(<span class="dt">grouping_variables =</span> <span class="st">&quot;eye_color&quot;</span>,
+                 <span class="dt">value_variables =</span> <span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;birth_year&quot;</span>))
+}</code></pre></div>
+<pre><code>## # A tibble: 15 x 4
+##        eye_color mean_mass mean_birth_year count
+##            &lt;chr&gt;     &lt;dbl&gt;           &lt;dbl&gt; &lt;int&gt;
+##  1         black  76.28571        33.00000    10
+##  2          blue  86.51667        67.06923    19
+##  3     blue-gray  77.00000        57.00000     1
+##  4         brown  66.09231       108.96429    21
+##  5          dark       NaN             NaN     1
+##  6          gold       NaN             NaN     1
+##  7 green, yellow 159.00000             NaN     1
+##  8         hazel  66.00000        34.50000     3
+##  9        orange 282.33333       231.00000     8
+## 10          pink       NaN             NaN     1
+## 11           red  81.40000        33.66667     5
+## 12     red, blue       NaN             NaN     1
+## 13       unknown  31.50000             NaN     3
+## 14         white  48.00000             NaN     1
+## 15        yellow  81.11111        76.38000    11</code></pre>
 <p>The point is: we did not have to bring in (or study) any deep-theory or heavy-weight tools such as <a href="https://CRAN.R-project.org/package=rlang"><code>rlang</code>/<code>tidyeval</code></a> or <a href="https://CRAN.R-project.org/package=lazyeval"><code>lazyeval</code></a> to complete our programming task. Once you are in <code>seplyr</code> notation, changes are very easy. You can separate translating into <code>seplyr</code> notation from the work of designing your wrapper function (breaking your programming work into smaller easier to understand steps).</p>
 <p>The <code>seplyr</code> method is simple, easy to teach, and powerful. The package contains a number of worked examples both in <code>help()</code> and <code>vignette(package='seplyr')</code> documentation.</p>
 

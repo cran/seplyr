@@ -12,6 +12,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::iris %>%
 #'   summarize_se(c("Mean_Sepal_Length" := "mean(Sepal.Length)",
 #'                  "Max_Sepal_Length" := "max(Sepal.Length)")) %>%
@@ -23,9 +25,13 @@
 summarize_se <- function(.data, summarizeTerms) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
+  env <- parent.frame()
   summarizeQ <- lapply(summarizeTerms,
-                    function(si) { rlang::parse_expr(si) })
-  summarize(.data = .data, !!!summarizeQ)
+                    function(si) {
+                      rlang::parse_quosure(si,
+                                           env = env)
+                    })
+  dplyr::summarize(.data = .data, !!!summarizeQ)
 }
 
 

@@ -12,7 +12,11 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#' packageVersion("dplyr")
+#'
 #' upperBound <- 3.5
+#'
 #' datasets::iris %>%
 #'   filter_se(c("Sepal.Length >= 2 * Sepal.Width",
 #'               "Petal.Length <= upperBound"))
@@ -23,7 +27,11 @@
 filter_se <- function(.data, filterTerms) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
+  env <- parent.frame()
   filterQ <- lapply(filterTerms,
-                    function(si) { rlang::parse_expr(si) })
-  filter(.data = .data, !!!filterQ)
+                    function(si) {
+                      rlang::parse_quosure(si,
+                                           env = env)
+                    })
+  dplyr::filter(.data = .data, !!!filterQ)
 }

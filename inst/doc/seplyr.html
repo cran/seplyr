@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-07-22" />
+<meta name="date" content="2017-08-01" />
 
 <title>seplyr</title>
 
@@ -70,12 +70,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">seplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-07-22</em></h4>
+<h4 class="date"><em>2017-08-01</em></h4>
 
 
 
-<p>This document describes the <a href="https://www.r-project.org"><code>R</code></a> package <a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> which supplies <em>s</em>tandard <em>e</em>valuation interfaces for some common <a href="https://CRAN.R-project.org/package=dplyr"><code>dplyr</code></a> verbs. <code>seplyr</code> stands for “standard evaluation dplyr” (“standard” meaning we prefer explicit user provided strings over passive <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation</a> capture of un-evaluated user code) or “string edition dplyr.”</p>
+<p>The <a href="https://www.r-project.org"><code>R</code></a> package <a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> supplies <em>s</em>tandard <em>e</em>valuation interfaces for some common <a href="https://CRAN.R-project.org/package=dplyr"><code>dplyr</code></a> verbs. <code>seplyr</code> stands for “standard evaluation dplyr” (“standard” meaning we prefer explicit user provided strings over passive <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation</a> capture of un-evaluated user code) or “string edition dplyr.”</p>
 <p>The idea is this package lets you program over <code>dplyr</code> 0.7.* without needing a Ph.D. in computer science.</p>
+<p>To install this packing in <code>R</code> please either install from <a href="https://CRAN.R-project.org/package=seplyr">CRAN</a> with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   <span class="kw">install.packages</span>(<span class="st">'seplyr'</span>)</code></pre></div>
+<p>or from <a href="https://github.com/WinVector/seplyr"><code>GitHub</code></a>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   devtools::<span class="kw">install_github</span>(<span class="st">'WinVector/seplyr'</span>)</code></pre></div>
 <p>In <code>dplyr</code> if you know the names of columns when you are writing code you can write code such as the following.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
 <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
@@ -115,8 +119,7 @@ datasets::mtcars %&gt;%<span class="st"> </span>
 ## 5 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
 ## 6 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</code></pre>
 <p>If you don’t want to try and digest entire theory of quasi-quoting and splicing (the <code>!!!</code> operator) then you can use <code>seplyr</code> which conveniently and legibly wraps the operations as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># devtools::install_github('WinVector/seplyr')</span>
-<span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
 
 datasets::mtcars %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange_se</span>(orderTerms) %&gt;%<span class="st"> </span>
@@ -154,7 +157,7 @@ datasets::mtcars %&gt;%<span class="st"> </span>
 <li><code>deselect()</code></li>
 <li><code>rename_mp()</code></li>
 </ul>
-<p>For now we are not emphasizing <code>seplyr::mutate_se()</code> and <code>seplyr::summarize_se()</code> as we think in some cases the best ways to work with these verbs may be a combination of their <code>dplyr::*_at()</code> forms plus a <code>seplyr::rename_se()</code>. For example:</p>
+<p>One can combine <code>seplyr</code> methods with standard <code>dplyr</code> methods (such as <code>summarize_at()</code>):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::iris %&gt;%
 <span class="st">  </span><span class="kw">group_by_at</span>(<span class="st">&quot;Species&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">c</span>(<span class="st">&quot;Sepal.Length&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>), <span class="kw">funs</span>(mean)) %&gt;%
@@ -166,8 +169,7 @@ datasets::mtcars %&gt;%<span class="st"> </span>
 ## 1     setosa             5.006            3.428
 ## 2 versicolor             5.936            2.770
 ## 3  virginica             6.588            2.974</code></pre>
-<p>In the above the <code>rename_se()</code> is simply changing the column names to what we want (because we did not specify this in the <code>summarize_at()</code> step). The <code>:=</code> operator is just a convenience function for building up maps, we could also have used “<code>=</code>” or passed in a named vector built up elsewhere.</p>
-<p>However, we can also perform the above directly with <code>seplyr::summarize_se()</code> as follows.</p>
+<p>One also perform the above directly with <code>seplyr::summarize_se()</code> as follows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::iris %&gt;%
 <span class="st">  </span><span class="kw">group_by_se</span>(<span class="st">&quot;Species&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>, 
@@ -187,6 +189,7 @@ datasets::mtcars %&gt;%<span class="st"> </span>
 <li><code>add_rank_indices()</code> Adds rank indices to data.</li>
 </ul>
 <p><code>seplyr</code> is designed to be a thin package that passes all work to <code>dplyr</code>. If you want a package that works around <code>dplyr</code> implementation differences on different data sources I suggest trying our own <a href="https://CRAN.R-project.org/package=replyr"><code>replyr</code></a> package. Another alternative is using <a href="https://github.com/WinVector/wrapr/blob/master/README.md"><code>wrapr::let()</code></a>.</p>
+<p><code>seplyr</code> methods are short and have examples in their help, so always try both help and printing the method (for example: <code>help(select_se)</code> and <code>print(select_se)</code>). Printing methods can show you how to use <code>dplyr</code> directly with <code>rlang</code>/<code>tidyeval</code> methodology (allowing you to skip <code>seplyr</code>).</p>
 <p>Some inspiration comes from <a href="https://gist.github.com/skranz/9681509">Sebastian Kranz’s <code>s_dplyr</code></a>.</p>
 
 

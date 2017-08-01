@@ -17,6 +17,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>% tally_se()
 #' datasets::mtcars %>% tally_se(wt = "cyl")
 #'
@@ -24,9 +26,9 @@
 #'
 tally_se <- function(x, wt=NULL, sort = FALSE) {
   if(is.null(wt)) {
-    tally(x, sort=sort)
+    dplyr::tally(x, sort=sort)
   } else {
-    tally(x, wt = !!rlang::sym(wt), sort=sort)
+    dplyr::tally(x, wt = !!rlang::sym(wt), sort=sort)
   }
 }
 
@@ -48,15 +50,17 @@ tally_se <- function(x, wt=NULL, sort = FALSE) {
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::iris %>% add_tally_se()
 #'
 #' @export
 #'
 add_tally_se <- function(x, wt=NULL, sort = FALSE) {
   if(is.null(wt)) {
-    add_tally(x, sort=sort)
+    dplyr::add_tally(x, sort=sort)
   } else {
-    add_tally(x, wt = !!rlang::sym(wt), sort=sort)
+    dplyr::add_tally(x, wt = !!rlang::sym(wt), sort=sort)
   }
 }
 
@@ -81,6 +85,8 @@ add_tally_se <- function(x, wt=NULL, sort = FALSE) {
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>% count_se(groupingVars= c('cyl', 'gear'))
 #'
 #' @export
@@ -89,9 +95,9 @@ count_se <- function(x, groupingVars = NULL,
                      wt=NULL, sort = FALSE) {
   groupingSyms <- rlang::syms(groupingVars)
   if(is.null(wt)) {
-    count(x, !!!groupingSyms, sort=sort)
+    dplyr::count(x, !!!groupingSyms, sort=sort)
   } else {
-    count(x, !!!groupingSyms, wt = !!rlang::sym(wt), sort=sort)
+    dplyr::count(x, !!!groupingSyms, wt = !!rlang::sym(wt), sort=sort)
   }
 }
 
@@ -114,6 +120,8 @@ count_se <- function(x, groupingVars = NULL,
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::iris %>% count_se(wt = "Sepal.Width", groupingVars= c('Species'))
 #'
 #' @export
@@ -122,9 +130,9 @@ add_count_se <- function(x, groupingVars = NULL,
                          wt=NULL, sort = FALSE) {
   groupingSyms <- rlang::syms(groupingVars)
   if(is.null(wt)) {
-    add_count(x, !!!groupingSyms, sort=sort)
+    dplyr::add_count(x, !!!groupingSyms, sort=sort)
   } else {
-    add_count(x, !!!groupingSyms, wt = !!rlang::sym(wt), sort=sort)
+    dplyr::add_count(x, !!!groupingSyms, wt = !!rlang::sym(wt), sort=sort)
   }
 }
 

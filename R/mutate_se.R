@@ -13,6 +13,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::iris %>%
 #'   mutate_se(c("Sepal_Long" := "Sepal.Length >= 2 * Sepal.Width",
 #'               "Petal_Short" := "Petal.Length <= 3.5")) %>%
@@ -24,7 +26,11 @@
 mutate_se <- function(.data, mutateTerms) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
+  env <- parent.frame()
   mutateQ <- lapply(mutateTerms,
-                    function(si) { rlang::parse_expr(si) })
-  mutate(.data = .data, !!!mutateQ)
+                    function(si) {
+                      rlang::parse_quosure(si,
+                                           env = env)
+                    })
+  dplyr::mutate(.data = .data, !!!mutateQ)
 }

@@ -1,3 +1,9 @@
+## ---- eval=FALSE---------------------------------------------------------
+#     install.packages('seplyr')
+
+## ---- eval=FALSE---------------------------------------------------------
+#     devtools::install_github('WinVector/seplyr')
+
 ## ----ex1a----------------------------------------------------------------
 suppressPackageStartupMessages(library("dplyr"))
 packageVersion("dplyr")
@@ -25,7 +31,6 @@ datasets::mtcars %>%
   head()
 
 ## ----ex1c----------------------------------------------------------------
-# devtools::install_github('WinVector/seplyr')
 library("seplyr")
 
 datasets::mtcars %>% 

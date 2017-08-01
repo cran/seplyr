@@ -2,7 +2,7 @@
 suppressPackageStartupMessages(library("dplyr"))
 packageVersion("dplyr")
 
-colnames(starwars)
+cat(colnames(starwars), sep = '\n')
 
 starwars %>%
   group_by(homeworld) %>%
@@ -11,7 +11,6 @@ starwars %>%
             count = n())
 
 ## ----exc-----------------------------------------------------------------
-# devtools::install_github("WinVector/seplyr")
 library("seplyr")
 
 starwars %>%
@@ -41,7 +40,7 @@ grouped_mean <- function(data,
                         value_variables, 
                         ", na.rm = TRUE)")
   calculation <- result_names := expressions
-  print(calculation) # print for demonstration
+  print(as.list(calculation)) # print for demonstration
   data %>%
     group_by_se(grouping_variables) %>%
     summarize_se(c(calculation,
@@ -51,4 +50,23 @@ grouped_mean <- function(data,
 starwars %>% 
   grouped_mean(grouping_variables = "eye_color",
                value_variables = c("mass", "birth_year"))
+
+## ----expg----------------------------------------------------------------
+if(requireNamespace('glue', quietly = TRUE)) {
+  suppressPackageStartupMessages(library("glue"))
+  
+  grouped_mean <- function(data, 
+                           grouping_variables, 
+                           value_variables) {
+    data %>%
+      group_by_se(grouping_variables) %>%
+      summarize_se(c(glue("mean_{value_variables}") := 
+                       glue("mean({value_variables}, na.rm = TRUE)"),
+                     "count" := "n()"))
+  }
+  
+  starwars %>% 
+    grouped_mean(grouping_variables = "eye_color",
+                 value_variables = c("mass", "birth_year"))
+}
 

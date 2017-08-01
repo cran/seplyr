@@ -12,6 +12,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>%
 #'   group_by_se(c("cyl", "gear")) %>%
 #'   head()
@@ -22,6 +24,6 @@
 group_by_se <- function(.data, groupingVars, add = FALSE) {
   # convert char vector into spliceable vector
   groupingSyms <- rlang::syms(groupingVars)
-  group_by(.data = .data, !!!groupingSyms, add = add)
+  dplyr::group_by(.data = .data, !!!groupingSyms, add = add)
 }
 

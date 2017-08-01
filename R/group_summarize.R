@@ -15,6 +15,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' group_summarize(datasets::mtcars,
 #'                     c("cyl", "gear"),
 #'                     group_mean_mpg = mean(mpg),
@@ -27,17 +29,21 @@ group_summarize <- function(d, groupingVars, ...,
                             arrangeTerms = NULL) {
   # convert char vector into spliceable vector
   groupingSyms <- rlang::syms(groupingVars)
-  d <- ungroup(d) # just in case
-  dg <- group_by(d, !!!groupingSyms)
+  d <- dplyr::ungroup(d) # just in case
+  dg <- dplyr::group_by(d, !!!groupingSyms)
   if(!is.null(arrangeTerms)) {
     # from: https://github.com/tidyverse/rlang/issues/116
-    arrangeTerms <- lapply(arrangeTerms,
-                           function(si) { rlang::parse_expr(si) })
-    dg <- arrange(dg, !!!arrangeTerms)
+    env <- parent.frame()
+    arrangeQ <- lapply(arrangeTerms,
+                      function(si) {
+                        rlang::parse_quosure(si,
+                                             env = env)
+                      })
+    dg <- dplyr::arrange(dg, !!!arrangeQ)
   }
-  ds <- summarize(dg, ...)
+  ds <- dplyr::summarize(dg, ...)
   # work around https://github.com/tidyverse/dplyr/issues/2963
-  ungroup(ds)
+  dplyr::ungroup(ds)
 }
 
 

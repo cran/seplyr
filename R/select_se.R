@@ -10,18 +10,24 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>%
 #'    select_se(c("cyl", "gear")) %>%
 #'    head()
 #' # essentially dplyr::select_at()
+#'
+#' data.frame(a=1, b=2) %>% select_se('-b')
 #'
 #' @export
 #'
 select_se <- function(.data, colNames) {
   # select(.data, one_of(colNames))
   # convert char vector into spliceable vector
-  colSyms <- rlang::syms(colNames)
-  select(.data, !!!colSyms)
+  # use full parse instead of sym() to allow -var forms
+  colSyms <- lapply(colNames,
+                    function(si) { rlang::parse_expr(si) })
+  dplyr::select(.data, !!!colSyms)
 }
 
 #' deselect standard interface.
@@ -36,6 +42,8 @@ select_se <- function(.data, colNames) {
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>%
 #'    deselect(c("cyl", "gear")) %>%
 #'    head()
@@ -47,5 +55,5 @@ deselect <- function(.data, colNames) {
   # select(.data, one_of(colNames))
   # convert char vector into spliceable vector
   colSyms <- rlang::syms(setdiff(colnames(.data), colNames))
-  select(.data, !!!colSyms)
+  dplyr::select(.data, !!!colSyms)
 }

@@ -13,6 +13,8 @@
 #'
 #' @examples
 #'
+#' suppressPackageStartupMessages(library("dplyr"))
+#'
 #' datasets::mtcars %>%
 #'   arrange_se(c("cyl", "desc(gear)")) %>%
 #'   head()
@@ -24,7 +26,11 @@
 arrange_se <- function(.data, arrangeTerms) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
+  env <- parent.frame()
   arrangeQ <- lapply(arrangeTerms,
-                     function(si) { rlang::parse_expr(si) })
-  arrange(.data = .data, !!!arrangeQ)
+                    function(si) {
+                      rlang::parse_quosure(si,
+                                           env = env)
+                    })
+  dplyr::arrange(.data = .data, !!!arrangeQ)
 }
