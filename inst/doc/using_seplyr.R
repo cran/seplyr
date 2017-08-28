@@ -61,7 +61,7 @@ if(requireNamespace('glue', quietly = TRUE)) {
     data %>%
       group_by_se(grouping_variables) %>%
       summarize_se(c(glue("mean_{value_variables}") := 
-                       glue("mean({value_variables}, na.rm = TRUE)"),
+                     glue("mean({value_variables}, na.rm = TRUE)"),
                      "count" := "n()"))
   }
   

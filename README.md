@@ -2,6 +2,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 The [`R`](https://www.r-project.org) package [`seplyr`](https://github.com/WinVector/seplyr) supplies *s*tandard *e*valuation interfaces for some common [`dplyr`](https://CRAN.R-project.org/package=dplyr) verbs. `seplyr` stands for "standard evaluation dplyr" ("standard" meaning we prefer explicit user provided strings over passive [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) capture of un-evaluated user code) or "string edition dplyr."
 
+![](https://github.com/WinVector/seplyr/raw/master/tools/safety.png)
+
 To get started we suggest visiting the [`seplyr` site](https://winvector.github.io/seplyr/), and checking out [some examples](https://winvector.github.io/seplyr/articles/seplyr.html).
 
 One quick example:
@@ -12,14 +14,14 @@ One quick example:
 orderTerms <- c('cyl', 'desc(gear)')
 
 # load packages
-suppressPackageStartupMessages(library("dplyr"))
 library("seplyr")
+ #  Loading required package: wrapr
 
 # where we are actually working (perhaps in a re-usable
 # script or function)
-datasets::mtcars %>% 
-  arrange_se(orderTerms) %>% 
-  head()
+datasets::mtcars %.>% 
+  arrange_se(., orderTerms) %.>% 
+  head(.)
  #     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
  #  1 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
  #  2 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
@@ -42,3 +44,5 @@ or from [`GitHub`](https://github.com/WinVector/seplyr):
 ``` r
    devtools::install_github('WinVector/seplyr')
 ```
+
+Please see [`help("%.>%", package="wrapr")`](https://winvector.github.io/wrapr/reference/grapes-.-greater-than-grapes.html) for details on "dot pipe."

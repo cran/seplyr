@@ -4,28 +4,27 @@
 #' summarize a data frame by the summarizeTerms.  Accepts arbitrary text as
 #' summarizeTerms to allow forms such as "mean(Sepal.Length)".
 #'
-#' @seealso \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{summarize_at}}, \code{\link[seplyr]{:=}}
+#' @seealso \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{summarize_at}}, \code{\link[wrapr]{:=}}
 #'
 #' @param .data data.frame
 #' @param summarizeTerms character vector of column expressions to summarize by.
+#' @param env environment to work in.
 #' @return .data with summarizeTerms summarization applied.
 #'
 #' @examples
 #'
-#' suppressPackageStartupMessages(library("dplyr"))
 #'
-#' datasets::iris %>%
-#'   summarize_se(c("Mean_Sepal_Length" := "mean(Sepal.Length)",
-#'                  "Max_Sepal_Length" := "max(Sepal.Length)")) %>%
-#'   head()
+#' datasets::iris %.>%
+#'   summarize_se(., c("Mean_Sepal_Length" := "mean(Sepal.Length)",
+#'                     "Max_Sepal_Length" := "max(Sepal.Length)")) %.>%
+#'   head(.)
 #'
 #'
 #' @export
 #'
-summarize_se <- function(.data, summarizeTerms) {
+summarize_se <- function(.data, summarizeTerms,  env=parent.frame()) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
-  env <- parent.frame()
   summarizeQ <- lapply(summarizeTerms,
                     function(si) {
                       rlang::parse_quosure(si,

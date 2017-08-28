@@ -4,12 +4,14 @@
 \alias{mutate_nse}
 \title{mutate non-standard evaluation interface.}
 \usage{
-mutate_nse(.data, ...)
+mutate_nse(.data, ..., env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
 
-\item{...}{expressions to mutate by.}
+\item{...}{stringified expressions to mutate by.}
+
+\item{env}{environment to work in.}
 }
 \value{
 .data with altered columns.
@@ -21,18 +23,19 @@ Terms are vectors or lists of the form "lhs := rhs".
 }
 \examples{
 
-suppressPackageStartupMessages(library("dplyr"))
 
 resCol1 <- "Sepal_Long"
 ratio <- 2
 compCol1 <- "Sepal.Width"
-datasets::iris \%>\%
-  mutate_nse(resCol1 := "Sepal.Length" >= ratio * compCol1,
-             "Petal_Short" := "Petal.Length" <= 3.5) \%>\%
-  summary()
+
+
+datasets::iris \%.>\%
+  mutate_nse(., resCol1 := "Sepal.Length" >= ratio * compCol1,
+                "Petal_Short" := "Petal.Length" <= 3.5) \%.>\%
+  summary(.)
 
 
 }
 \seealso{
-\code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[seplyr]{:=}}
+\code{\link{mutate_se}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[wrapr]{:=}}
 }

@@ -5,14 +5,16 @@
 \alias{summarise_se}
 \title{summarize standard interface.}
 \usage{
-summarize_se(.data, summarizeTerms)
+summarize_se(.data, summarizeTerms, env = parent.frame())
 
-summarise_se(.data, summarizeTerms)
+summarise_se(.data, summarizeTerms, env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
 
 \item{summarizeTerms}{character vector of column expressions to summarize by.}
+
+\item{env}{environment to work in.}
 }
 \value{
 .data with summarizeTerms summarization applied.
@@ -23,15 +25,14 @@ summarizeTerms to allow forms such as "mean(Sepal.Length)".
 }
 \examples{
 
-suppressPackageStartupMessages(library("dplyr"))
 
-datasets::iris \%>\%
-  summarize_se(c("Mean_Sepal_Length" := "mean(Sepal.Length)",
-                 "Max_Sepal_Length" := "max(Sepal.Length)")) \%>\%
-  head()
+datasets::iris \%.>\%
+  summarize_se(., c("Mean_Sepal_Length" := "mean(Sepal.Length)",
+                    "Max_Sepal_Length" := "max(Sepal.Length)")) \%.>\%
+  head(.)
 
 
 }
 \seealso{
-\code{\link[dplyr]{summarize}}, \code{\link[dplyr]{summarize_at}}, \code{\link[seplyr]{:=}}
+\code{\link[dplyr]{summarize}}, \code{\link[dplyr]{summarize_at}}, \code{\link[wrapr]{:=}}
 }

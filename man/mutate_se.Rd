@@ -4,12 +4,14 @@
 \alias{mutate_se}
 \title{mutate standard evaluation interface.}
 \usage{
-mutate_se(.data, mutateTerms)
+mutate_se(.data, mutateTerms, env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
 
 \item{mutateTerms}{character vector of column expressions to mutate by.}
+
+\item{env}{environment to work in.}
 }
 \value{
 .data with altered columns.
@@ -21,16 +23,17 @@ Terms are vectors or lists of the form "lhs := rhs".
 }
 \examples{
 
-suppressPackageStartupMessages(library("dplyr"))
 
 resCol1 <- "Sepal_Long"
-datasets::iris \%>\%
-  mutate_se(c(resCol1 := "Sepal.Length >= 2 * Sepal.Width",
-              "Petal_Short" := "Petal.Length <= 3.5")) \%>\%
-  head()
+limit <- 3.5
+
+datasets::iris \%.>\%
+  mutate_se(., c(resCol1 := "Sepal.Length >= 2 * Sepal.Width",
+                 "Petal_Short" := "Petal.Length <= limit")) \%.>\%
+  head(.)
 
 
 }
 \seealso{
-\code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[seplyr]{:=}}
+\code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[wrapr]{:=}}
 }

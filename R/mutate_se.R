@@ -5,29 +5,30 @@
 #' mutateTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
 #' Terms are vectors or lists of the form "lhs := rhs".
 #'
-#' @seealso \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[seplyr]{:=}}
+#' @seealso \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[wrapr]{:=}}
 #'
 #' @param .data data.frame
 #' @param mutateTerms character vector of column expressions to mutate by.
+#' @param env environment to work in.
 #' @return .data with altered columns.
 #'
 #' @examples
 #'
-#' suppressPackageStartupMessages(library("dplyr"))
 #'
 #' resCol1 <- "Sepal_Long"
-#' datasets::iris %>%
-#'   mutate_se(c(resCol1 := "Sepal.Length >= 2 * Sepal.Width",
-#'               "Petal_Short" := "Petal.Length <= 3.5")) %>%
-#'   head()
+#' limit <- 3.5
+#'
+#' datasets::iris %.>%
+#'   mutate_se(., c(resCol1 := "Sepal.Length >= 2 * Sepal.Width",
+#'                  "Petal_Short" := "Petal.Length <= limit")) %.>%
+#'   head(.)
 #'
 #'
 #' @export
 #'
-mutate_se <- function(.data, mutateTerms) {
+mutate_se <- function(.data, mutateTerms, env= parent.frame()) {
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
-  env <- parent.frame()
   mutateQ <- lapply(mutateTerms,
                     function(si) {
                       rlang::parse_quosure(si,

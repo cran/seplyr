@@ -4,8 +4,8 @@
 \alias{add_group_sub_indices}
 \title{Group a data frame and add in-group indices as a column.}
 \usage{
-add_group_sub_indices(.data, ..., groupingVars, arrangeTerms = NULL,
-  orderColumn)
+add_group_sub_indices(.data, ..., groupingVars, orderColumn,
+  arrangeTerms = NULL, env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
@@ -14,9 +14,11 @@ add_group_sub_indices(.data, ..., groupingVars, arrangeTerms = NULL,
 
 \item{groupingVars}{character vector of column names to group by.}
 
+\item{orderColumn}{character name of column to add in-group order marks to.}
+
 \item{arrangeTerms}{character vector of column expressions to arrange by.}
 
-\item{orderColumn}{character name of column to add in-group order marks to.}
+\item{env}{environment to work in.}
 }
 \value{
 .data with in group order indices added (no ties).
@@ -26,20 +28,19 @@ Group a data frame and add in-group indices as a column.
 }
 \examples{
 
-suppressPackageStartupMessages(library("dplyr"))
 
 groupingVars = c("cyl", "gear")
 
-datasets::mtcars \%>\%
+datasets::mtcars \%.>\%
   # dplyr doesn't currently export tibble::rownames_to_column()
-  { mutate(., CarName = rownames(.) ) } \%>\%
-  select_se(c('CarName', 'cyl', 'gear', 'hp', 'wt')) \%>\%
-  add_group_indices(groupingVars = groupingVars,
-                    indexColumn = 'groupID') \%>\%
-  add_group_sub_indices(groupingVars = groupingVars,
+  mutate_se(., "CarName" := "rownames(.)" ) \%.>\%
+  select_se(., c('CarName', 'cyl', 'gear', 'hp', 'wt')) \%.>\%
+  add_group_indices(., groupingVars = groupingVars,
+                    indexColumn = 'groupID') \%.>\%
+  add_group_sub_indices(., groupingVars = groupingVars,
                        arrangeTerms = c('desc(hp)', 'wt'),
-                       orderColumn = 'orderInGroup') \%>\%
-  arrange_se(c('groupID', 'orderInGroup'))
+                       orderColumn = 'orderInGroup') \%.>\%
+  arrange_se(., c('groupID', 'orderInGroup'))
 
 
 }

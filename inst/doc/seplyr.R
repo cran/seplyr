@@ -33,20 +33,20 @@ datasets::mtcars %>%
 ## ----ex1c----------------------------------------------------------------
 library("seplyr")
 
-datasets::mtcars %>% 
-  arrange_se(orderTerms) %>% 
-  head()
+datasets::mtcars %.>% 
+  arrange_se(., orderTerms) %>% 
+  head(.)
 
 ## ----atex----------------------------------------------------------------
-datasets::iris %>%
-  group_by_at("Species") %>%
-  summarize_at(c("Sepal.Length", "Sepal.Width"), funs(mean)) %>%
-  rename_se(c("Mean.Sepal.Length" := "Sepal.Length", 
-              "Mean.Sepal.Width" := "Sepal.Width"))
+datasets::iris %.>%
+  group_by_at(., "Species") %>%
+  summarize_at(., c("Sepal.Length", "Sepal.Width"), funs(mean)) %.>%
+  rename_se(., c("Mean.Sepal.Length" := "Sepal.Length", 
+                 "Mean.Sepal.Width" := "Sepal.Width"))
 
 ## ----atexse--------------------------------------------------------------
-datasets::iris %>%
-  group_by_se("Species") %>%
-  summarize_se(c("Mean.Sepal.Length" := "mean(Sepal.Length)", 
-                 "Mean.Sepal.Width" := "mean(Sepal.Width)"))
+datasets::iris %.>%
+  group_by_se(., "Species") %.>%
+  summarize_se(., c("Mean.Sepal.Length" := "mean(Sepal.Length)", 
+                    "Mean.Sepal.Width" := "mean(Sepal.Width)"))
 

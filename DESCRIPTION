@@ -1,8 +1,8 @@
 Package: seplyr
 Type: Package
 Title: Standard Evaluation Interfaces for Common 'dplyr' Tasks
-Version: 0.1.4
-Date: 2017-08-21
+Version: 0.1.5
+Date: 2017-08-28
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -27,6 +27,7 @@ Description: The 'seplyr' (standard evaluation data.frame 'dplyr') package suppl
     per-group identifies to a 'data.frame' without depending on row-order).
 License: GPL-3
 Encoding: UTF-8
+Depends: wrapr (>= 0.4.1)
 Imports: dplyr (>= 0.7.1), rlang (>= 0.1.1), datasets
 LazyData: true
 RoxygenNote: 6.0.1
@@ -34,8 +35,8 @@ Suggests: glue, knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2017-08-21 17:57:47 UTC; johnmount
+Packaged: 2017-08-28 14:28:12 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2017-08-21 18:04:35 UTC
+Date/Publication: 2017-08-28 14:35:50 UTC

@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-08-21" />
+<meta name="date" content="2017-08-28" />
 
 <title>rename_se</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">rename_se</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-08-21</em></h4>
+<h4 class="date"><em>2017-08-28</em></h4>
 
 
 
@@ -103,9 +103,9 @@ datasets::mtcars %&gt;%
 <p>Because <code>seplyr</code> is intended to be a set of adapters for <code>dplyr</code> we simply adopt <code>dplyr::rename()</code>’s convention. This allows the user to mechanically translate their experience and expectations from scripting over <code>dplyr::rename()</code> to directly use <code>seplyr::rename_se()</code> as follows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
 
-datasets::mtcars %&gt;%
-<span class="st">  </span><span class="kw">rename_se</span>(<span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> :<span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> :<span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
+datasets::mtcars %.&gt;%
+<span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> :<span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> :<span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) %.&gt;%
+<span class="st">  </span><span class="kw">head</span>(.)</code></pre></div>
 <pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
 ## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
 ## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
@@ -141,9 +141,9 @@ datasets::mtcars %&gt;%
 ## Valiant              1</code></pre>
 <p>This is sensible, but is very different than <code>dplyr::rename()</code>. Thus there remains a need for a standard analogue.</p>
 <p>For convenience we also supply an adapter with the above mapping semantics.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::mtcars %&gt;%
-<span class="st">  </span><span class="kw">rename_mp</span>(mp) %&gt;%
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets::mtcars %.&gt;%
+<span class="st">  </span><span class="kw">rename_mp</span>(., mp) %.&gt;%
+<span class="st">  </span><span class="kw">head</span>(.)</code></pre></div>
 <pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
 ## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
 ## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
@@ -158,6 +158,7 @@ datasets::mtcars %&gt;%
 ## Hornet 4 Drive       1
 ## Hornet Sportabout    2
 ## Valiant              1</code></pre>
+<p>Please see <a href="https://winvector.github.io/wrapr/reference/grapes-.-greater-than-grapes.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
 
 
 

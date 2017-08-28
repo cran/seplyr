@@ -1,5 +1,5 @@
 ## ----ex1-----------------------------------------------------------------
-library("seplyr")
+library("wrapr")
 
 'a' := 5
 
@@ -12,23 +12,20 @@ key = 'keycode'
 key := 'value'
 
 ## ----ex2-----------------------------------------------------------------
-suppressPackageStartupMessages(library("dplyr"))
+library("seplyr")
 
-datasets::iris %>%
-  summarize_se("Mean_Sepal_Length" := "mean(Sepal.Length)")
+datasets::iris %.>%
+  summarize_se(., "Mean_Sepal_Length" := "mean(Sepal.Length)")
 
 ## ----ex3-----------------------------------------------------------------
-datasets::iris %>%
-  group_by_se("Species") %>%
-  summarize_se(c("Mean_Sepal_Length" := "mean(Sepal.Length)",
-                 "Mean_Sepal_Width" := "mean(Sepal.Width)"))
+datasets::iris %.>%
+  group_by_se(., "Species") %.>%
+  summarize_se(., c("Mean_Sepal_Length" := "mean(Sepal.Length)",
+                    "Mean_Sepal_Width" := "mean(Sepal.Width)"))
 
 ## ----ex4-----------------------------------------------------------------
 resultColumn <- "summary_value"
-datasets::iris %>%
-  group_by_se("Species") %>%
-  summarize_se(resultColumn := "mean(Sepal.Length)")
-
-## ----print, eval=FALSE---------------------------------------------------
-#  help(`:=`, package = 'seplyr')
+datasets::iris %.>%
+  group_by_se(., "Species") %.>%
+  summarize_se(., resultColumn := "mean(Sepal.Length)")
 

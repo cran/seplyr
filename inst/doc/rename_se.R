@@ -12,9 +12,9 @@ print(mp)
 ## ----rename2-------------------------------------------------------------
 library("seplyr")
 
-datasets::mtcars %>%
-  rename_se(c("cylinders" := "cyl", "gears" := "gear")) %>%
-  head()
+datasets::mtcars %.>%
+  rename_se(., c("cylinders" := "cyl", "gears" := "gear")) %.>%
+  head(.)
 
 ## ----rename3-------------------------------------------------------------
 datasets::mtcars %>%
@@ -22,7 +22,7 @@ datasets::mtcars %>%
   head()
 
 ## ----rename4-------------------------------------------------------------
-datasets::mtcars %>%
-  rename_mp(mp) %>%
-  head()
+datasets::mtcars %.>%
+  rename_mp(., mp) %.>%
+  head(.)
 

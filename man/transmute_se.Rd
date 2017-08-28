@@ -4,12 +4,14 @@
 \alias{transmute_se}
 \title{transmute standard interface.}
 \usage{
-transmute_se(.data, transmuteTerms)
+transmute_se(.data, transmuteTerms, env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
 
 \item{transmuteTerms}{character vector of column expressions to transmute by.}
+
+\item{env}{environment to work in.}
 }
 \value{
 .data transumuted by transmuteTerms.
@@ -20,15 +22,14 @@ transmuteTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
 }
 \examples{
 
-suppressPackageStartupMessages(library("dplyr"))
 
-datasets::iris \%>\%
-  transmute_se(c("Sepal_Long" := "Sepal.Length >= 2 * Sepal.Width",
-              "Petal_Short" := "Petal.Length <= 3.5")) \%>\%
-  summary()
+datasets::iris \%.>\%
+  transmute_se(., c("Sepal_Long" := "Sepal.Length >= 2 * Sepal.Width",
+                    "Petal_Short" := "Petal.Length <= 3.5")) \%.>\%
+  summary(.)
 
 
 }
 \seealso{
-\code{\link[dplyr]{transmute}}, \code{\link[dplyr]{transmute_at}}, \code{\link[seplyr]{:=}}
+\code{\link[dplyr]{transmute}}, \code{\link[dplyr]{transmute_at}}, \code{\link[wrapr]{:=}}
 }
