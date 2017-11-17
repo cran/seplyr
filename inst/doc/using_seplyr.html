@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-08-28" />
+<meta name="date" content="2017-11-17" />
 
 <title>Using seplyr to Program Over dplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using seplyr to Program Over dplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-08-28</em></h4>
+<h4 class="date"><em>2017-11-17</em></h4>
 
 
 
@@ -79,7 +79,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Suppose you had worked out a <code>dplyr</code> pipeline that performed an analysis you were interested in. For an example we could take something similar to one of the examples from the <a href="https://blog.rstudio.com/2017/06/13/dplyr-0-7-0/"><code>dplyr</code> <code>0.7.0</code> announcement</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
 <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.7.2.9000'</code></pre>
+<pre><code>## [1] '0.7.4'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">colnames</span>(starwars), <span class="dt">sep =</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</code></pre></div>
 <pre><code>## name
 ## height
@@ -94,8 +94,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## films
 ## vehicles
 ## starships</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(homeworld) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(homeworld) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_height =</span> <span class="kw">mean</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
             <span class="dt">mean_mass =</span> <span class="kw">mean</span>(mass, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
             <span class="dt">count =</span> <span class="kw">n</span>())</code></pre></div>
@@ -129,11 +129,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Our converted code looks like the following.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
 
-starwars %&gt;%
-<span class="st">  </span><span class="kw">group_by_se</span>(<span class="st">&quot;homeworld&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;mean_height&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(height, na.rm = TRUE)&quot;</span>,
-                 <span class="st">&quot;mean_mass&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(mass, na.rm = TRUE)&quot;</span>,
-                 <span class="st">&quot;count&quot;</span> :<span class="er">=</span><span class="st"> &quot;n()&quot;</span>))</code></pre></div>
+starwars <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by_se</span>(<span class="st">&quot;homeworld&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;mean_height&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(height, na.rm = TRUE)&quot;</span>,
+                 <span class="st">&quot;mean_mass&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(mass, na.rm = TRUE)&quot;</span>,
+                 <span class="st">&quot;count&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;n()&quot;</span>))</code></pre></div>
 <pre><code>## # A tibble: 49 x 4
 ##         homeworld mean_height mean_mass count
 ##             &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
@@ -151,12 +151,12 @@ starwars %&gt;%
 <p>This code works the same as the original <code>dplyr</code> code. Obviously at this point all we have done is: worked to make the code a bit less pleasant looking. We have yet to see any benefit from this conversion (though we can turn this on its head and say all the original <code>dplyr</code> notation is saving us is from having to write a few quote marks).</p>
 <p>The benefit is: this new code can <em>very easily</em> be parameterized and wrapped in a re-usable function. In fact it is now simpler to do than to describe.</p>
 <p>For example: suppose (<a href="https://blog.rstudio.com/2017/06/13/dplyr-0-7-0/">as in the original example</a>) we want to create a function that lets us choose the grouping variable? This is now easy, we copy the code into a function and replace the explicit value <code>&quot;homeworld&quot;</code> with a variable:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars_mean &lt;-<span class="st"> </span>function(my_var) {
-  starwars %&gt;%
-<span class="st">    </span><span class="kw">group_by_se</span>(my_var) %&gt;%
-<span class="st">    </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;mean_height&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(height, na.rm = TRUE)&quot;</span>,
-                   <span class="st">&quot;mean_mass&quot;</span> :<span class="er">=</span><span class="st"> &quot;mean(mass, na.rm = TRUE)&quot;</span>,
-                   <span class="st">&quot;count&quot;</span> :<span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars_mean &lt;-<span class="st"> </span><span class="cf">function</span>(my_var) {
+  starwars <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by_se</span>(my_var) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="st">&quot;mean_height&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(height, na.rm = TRUE)&quot;</span>,
+                   <span class="st">&quot;mean_mass&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(mass, na.rm = TRUE)&quot;</span>,
+                   <span class="st">&quot;count&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
 }
 
 <span class="kw">starwars_mean</span>(<span class="st">&quot;hair_color&quot;</span>)</code></pre></div>
@@ -177,7 +177,7 @@ starwars %&gt;%
 ## 12         white    156.0000  59.66667     4
 ## 13          &lt;NA&gt;    141.6000 314.20000     5</code></pre>
 <p>In <code>seplyr</code> programming is easy (just replace values with variables). For example we can make a completely generic re-usable “grouped mean” function using <code>R</code>’s <code>paste()</code> function to build up expressions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span>function(data, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, 
                          grouping_variables, 
                          value_variables) {
   result_names &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;mean_&quot;</span>, 
@@ -185,15 +185,15 @@ starwars %&gt;%
   expressions &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;mean(&quot;</span>, 
                         value_variables, 
                         <span class="st">&quot;, na.rm = TRUE)&quot;</span>)
-  calculation &lt;-<span class="st"> </span>result_names :<span class="er">=</span><span class="st"> </span>expressions
+  calculation &lt;-<span class="st"> </span>result_names <span class="op">:</span><span class="er">=</span><span class="st"> </span>expressions
   <span class="kw">print</span>(<span class="kw">as.list</span>(calculation)) <span class="co"># print for demonstration</span>
-  data %&gt;%
-<span class="st">    </span><span class="kw">group_by_se</span>(grouping_variables) %&gt;%
+  data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by_se</span>(grouping_variables) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(calculation,
-                   <span class="st">&quot;count&quot;</span> :<span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
+                   <span class="st">&quot;count&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
 }
 
-starwars %&gt;%<span class="st"> </span>
+starwars <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">grouped_mean</span>(<span class="dt">grouping_variables =</span> <span class="st">&quot;eye_color&quot;</span>,
                <span class="dt">value_variables =</span> <span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;birth_year&quot;</span>))</code></pre></div>
 <pre><code>## $mean_mass
@@ -221,20 +221,20 @@ starwars %&gt;%<span class="st"> </span>
 ## 15        yellow  81.11111        76.38000    11</code></pre>
 <p>The only part that requires more study and practice was messing around with the expressions using <code>paste0()</code> (for more details on the string manipulation please try “<code>help(paste)</code>”). Notice also we used the “<code>:=</code>” operator to bind the list of desired result names to the matching calculations (please see “<code>help(named_map_builder)</code>” for more details).</p>
 <p>We can also use <code>gsub</code> or the <code>glue</code> package for the same effect:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if(<span class="kw">requireNamespace</span>(<span class="st">'glue'</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">'glue'</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
   <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;glue&quot;</span>))
   
-  grouped_mean &lt;-<span class="st"> </span>function(data, 
+  grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, 
                            grouping_variables, 
                            value_variables) {
-    data %&gt;%
-<span class="st">      </span><span class="kw">group_by_se</span>(grouping_variables) %&gt;%
-<span class="st">      </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="kw">glue</span>(<span class="st">&quot;mean_{value_variables}&quot;</span>) :<span class="er">=</span><span class="st"> </span>
+    data <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">group_by_se</span>(grouping_variables) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw">summarize_se</span>(<span class="kw">c</span>(<span class="kw">glue</span>(<span class="st">&quot;mean_{value_variables}&quot;</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span>
 <span class="st">                     </span><span class="kw">glue</span>(<span class="st">&quot;mean({value_variables}, na.rm = TRUE)&quot;</span>),
-                     <span class="st">&quot;count&quot;</span> :<span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
+                     <span class="st">&quot;count&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;n()&quot;</span>))
   }
   
-  starwars %&gt;%<span class="st"> </span>
+  starwars <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">grouped_mean</span>(<span class="dt">grouping_variables =</span> <span class="st">&quot;eye_color&quot;</span>,
                  <span class="dt">value_variables =</span> <span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;birth_year&quot;</span>))
 }</code></pre></div>

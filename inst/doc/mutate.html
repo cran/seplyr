@@ -14,7 +14,7 @@
 
 <meta name="date" content="2017-11-17" />
 
-<title>rename_se</title>
+<title>mutate</title>
 
 
 
@@ -68,77 +68,75 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">rename_se</h1>
+<h1 class="title toc-ignore">mutate</h1>
 <h4 class="author"><em>John Mount</em></h4>
 <h4 class="date"><em>2017-11-17</em></h4>
 
 
 
-<p><a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> is an attempt to work with the <a href="https://CRAN.R-project.org/package=dplyr"><code>dplyr</code> <code>0.7.*</code></a> <a href="https://www.r-project.org"><code>R</code></a> package through standard evaluation interfaces with a minimum of change and minimum of cognitive friction. Beyond championing standard evaluation it attempts to introduce as few of its own opinions as possible.</p>
-<p>A case in point is <code>dplyr::rename()</code>/<code>seplyr::rename_se()</code>. <code>dplyr::rename()</code> is used as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
-
-datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rename</span>(<span class="dt">cylinders =</span> cyl, <span class="dt">gears =</span> gear) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
-## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
-## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
-## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4
-## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3
-## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3
-## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3
-##                   carb
-## Mazda RX4            4
-## Mazda RX4 Wag        4
-## Datsun 710           1
-## Hornet 4 Drive       1
-## Hornet Sportabout    2
-## Valiant              1</code></pre>
-<p>Notice <code>dplyr::rename()</code> renamings are written as assignments making them very similar to <code>dplyr::mutate()</code>. This is the reverse from how <code>R</code> usually handles list or mapping structures. In named vectors or named lists keys are written on the left and values are written on the right as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cyl&quot;</span> =<span class="st"> &quot;cylinders&quot;</span>, <span class="st">&quot;gear&quot;</span> =<span class="st"> &quot;gears&quot;</span>)
-<span class="kw">print</span>(mp)</code></pre></div>
-<pre><code>##         cyl        gear 
-## &quot;cylinders&quot;     &quot;gears&quot;</code></pre>
-<p>Because <code>seplyr</code> is intended to be a set of adapters for <code>dplyr</code> we simply adopt <code>dplyr::rename()</code>’s convention. This allows the user to mechanically translate their experience and expectations from scripting over <code>dplyr::rename()</code> to directly use <code>seplyr::rename_se()</code> as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
-
-datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">head</span>(.)</code></pre></div>
-<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
-## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
-## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
-## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4
-## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3
-## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3
-## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3
-##                   carb
-## Mazda RX4            4
-## Mazda RX4 Wag        4
-## Datsun 710           1
-## Hornet 4 Drive       1
-## Hornet Sportabout    2
-## Valiant              1</code></pre>
-<p>We hope this makes it easy to translate one-off analyses into re-usable scripts by incrementally replacing known variable names with parametric versions. The <code>:=</code> operator is just a convenience function for building up maps, we could also have written <code>rename_se(c(&quot;cylinders&quot; = &quot;cyl&quot;, &quot;gears&quot; = &quot;gear&quot;))</code> or passed in a named vector built up elsewhere.</p>
-<p>In contrast <code>dplyr::rename_at()</code> has its own notation that seems to not imitate <code>dplyr::rename()</code>. The same operation using <code>dplyr::rename_at()</code> is something like the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rename_at</span>(<span class="kw">names</span>(mp), <span class="kw">funs</span>(<span class="cf">function</span>(si) { mp[si] })) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>##                    mpg NA disp  hp drat    wt  qsec vs am NA carb
-## Mazda RX4         21.0  6  160 110 3.90 2.620 16.46  0  1  4    4
-## Mazda RX4 Wag     21.0  6  160 110 3.90 2.875 17.02  0  1  4    4
-## Datsun 710        22.8  4  108  93 3.85 2.320 18.61  1  1  4    1
-## Hornet 4 Drive    21.4  6  258 110 3.08 3.215 19.44  1  0  3    1
-## Hornet Sportabout 18.7  8  360 175 3.15 3.440 17.02  0  0  3    2
-## Valiant           18.1  6  225 105 2.76 3.460 20.22  1  0  3    1</code></pre>
-<p>This is sensible, but is very different than <code>dplyr::rename()</code>. Thus there remains a need for a standard analogue.</p>
-<p>Also <code>rename_se</code> interpets all left-hand names as new column names and all right-hand names as old column names. This allows <code>rename_se</code> to be used to swap columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>) <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">c</span>(<span class="st">'b'</span>, <span class="st">'a'</span>))</code></pre></div>
-<pre><code>##   b a
-## 1 1 2</code></pre>
-<p>Please see <a href="https://winvector.github.io/wrapr/reference/grapes-.-greater-than-grapes.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">go &lt;-<span class="st"> </span><span class="kw">requireNamespace</span>(<span class="st">&quot;DBI&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>) <span class="op">&amp;&amp;</span>
+<span class="st">  </span><span class="kw">requireNamespace</span>(<span class="st">&quot;RSQLite&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>From <a href="https://github.com/tidyverse/dplyr/issues/3095"><code>dplyr</code> issue 3095</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(go) {
+  <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
+  <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)
+  
+  db &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)
+  d &lt;-<span class="st"> </span><span class="kw">copy_to</span>(db, <span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span>))
+  
+  <span class="co"># works</span>
+   d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">show_query</span>()
+  d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">print</span>()
+  
+  <span class="co"># fails</span>
+   d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2, a4 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a3) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">show_query</span>()
+  d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2, a4 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a3) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">print</span>()
+}</code></pre></div>
+<pre><code>## &lt;SQL&gt;
+## SELECT `a`, `a2`, `a2` AS `a3`
+## FROM (SELECT `a`, `a` AS `a2`
+## FROM `data.frame(a = 1)`)</code></pre>
+<pre><code>## # Source:   lazy query [?? x 3]
+## # Database: sqlite 3.19.3 [:memory:]
+##       a    a2    a3
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     1     1</code></pre>
+<pre><code>## &lt;SQL&gt;
+## SELECT `a`, `a2`, `a2` AS `a3`, `a3` AS `a4`
+## FROM (SELECT `a`, `a` AS `a2`
+## FROM `data.frame(a = 1)`)</code></pre>
+<pre><code>## Error in rsqlite_send_query(conn@ptr, statement): no such column: a3</code></pre>
+<p>Current work around, <a href="https://winvector.github.io/seplyr/">dev verson of seplyr</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(go) {
+  <span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
+  <span class="kw">packageVersion</span>(<span class="st">&quot;seplyr&quot;</span>)
+  
+  <span class="co"># works</span>
+   d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate_nse</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2, a4 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a3) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">show_query</span>()
+  d <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate_nse</span>(a2 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a, a3 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a2, a4 <span class="op">:</span><span class="er">=</span><span class="st"> </span>a3) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">print</span>()
+}</code></pre></div>
+<pre><code>## &lt;SQL&gt;
+## SELECT `a`, `a2`, `a3`, `a3` AS `a4`
+## FROM (SELECT `a`, `a2`, `a2` AS `a3`
+## FROM (SELECT `a`, `a` AS `a2`
+## FROM `data.frame(a = 1)`))</code></pre>
+<pre><code>## # Source:   lazy query [?? x 4]
+## # Database: sqlite 3.19.3 [:memory:]
+##       a    a2    a3    a4
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     1     1     1</code></pre>
 
 
 

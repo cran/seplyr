@@ -4,18 +4,24 @@
 \alias{rename_se}
 \title{rename standard interface.}
 \usage{
-rename_se(.data, mapping)
+rename_se(.data, mapping, splitTerms = TRUE, env = parent.frame())
 }
 \arguments{
 \item{.data}{data.frame}
 
 \item{mapping}{named character vector of columns to rename (new names on the left, original names on the right; this may seem reversed but it matches dplyr::rename()).}
+
+\item{splitTerms}{logical, if TRUE into separate renames (if FALSE instead, pass all at once to dplyr).}
+
+\item{env}{environment to work in.}
 }
 \value{
 .data with renamed columns
 }
 \description{
 rename columns (much different syntax than \code{\link[dplyr]{rename_at}}).
+All left hand sides are new column names and all right hand sides are old column names (
+this allows swaps).
 }
 \examples{
 
@@ -23,12 +29,16 @@ rename columns (much different syntax than \code{\link[dplyr]{rename_at}}).
 datasets::mtcars \%.>\%
    rename_se(., c("cylinders" := "cyl", "gears" := "gear")) \%.>\%
    head(.)
-# # sames as:
+# # same as:
 # datasets::mtcars \%>\%
 #    rename(cylinders = cyl, gears = gear) \%>\%
 #    head()
 
+# rename_se allows column swaps
+data.frame(a = 1, b = 2) \%.>\%
+   rename_se(., c('a', 'b') := c('b', 'a'))
+
 }
 \seealso{
-\code{\link{rename_mp}}, \code{\link[dplyr]{rename}},  \code{\link[dplyr]{rename_at}}, \code{\link[wrapr]{:=}}
+\code{\link[dplyr]{rename}},  \code{\link[dplyr]{rename_at}}, \code{\link[wrapr]{:=}}
 }

@@ -1,8 +1,8 @@
 Package: seplyr
 Type: Package
 Title: Standard Evaluation Interfaces for Common 'dplyr' Tasks
-Version: 0.1.5
-Date: 2017-08-28
+Version: 0.1.6
+Date: 2017-11-17
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -31,12 +31,12 @@ Depends: wrapr (>= 0.4.1)
 Imports: dplyr (>= 0.7.1), rlang (>= 0.1.1), datasets
 LazyData: true
 RoxygenNote: 6.0.1
-Suggests: glue, knitr, rmarkdown, testthat
+Suggests: glue, knitr, rmarkdown, testthat, DBI, RSQLite
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2017-08-28 14:28:12 UTC; johnmount
+Packaged: 2017-11-17 18:56:08 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2017-08-28 14:35:50 UTC
+Date/Publication: 2017-11-17 21:21:52 UTC
