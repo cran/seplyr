@@ -6,6 +6,11 @@
 #' Terms are vectors or lists of the form "lhs := rhs".
 #' Semantics are: terms are evaluated left to right if mutate_nse_split_terms==TRUE (the default).
 #'
+#' Note: this method as the default setting \code{mutate_nse_split_terms = TRUE}, which while
+#' safer (avoiding certain known \code{dplyr}/\code{dblyr} issues) can be needlessly expensive
+#' and have its own "too long sequence" issues on remote-data systems
+#' (please see the side-notes of \url{http://winvector.github.io/FluidData/partition_mutate.html} for some references).
+#'
 #' @seealso \code{\link{mutate_se}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[wrapr]{:=}}
 #'
 #' @param .data data.frame
@@ -36,6 +41,9 @@ mutate_nse <- function(.data, ...,
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   mutateTerms <- substitute(list(...))
+  if(!all(names(mutateTerms) %in% "")) {
+    stop("seplyr::mutate_nse() all assignments must be of the form a := b, not a = b")
+  }
   # mutateTerms is a list of k+1 items, first is "list" the rest are captured expressions
   res <- .data
   len <- length(mutateTerms) # first slot is "list"

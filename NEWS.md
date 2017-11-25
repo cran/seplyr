@@ -1,4 +1,9 @@
 
+# seplyr 0.5.0 2017-11-24
+
+ * mutate statement planner.
+ * per-row block if-else simulator
+
 # seplyr 0.1.6 2017-11-17
 
  * work on lists.
