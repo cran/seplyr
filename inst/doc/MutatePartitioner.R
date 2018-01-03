@@ -53,10 +53,5 @@ plan <- partition_mutate_qt(
 print(plan)
 
 ## ----exec, eval=FALSE----------------------------------------------------
-#  res <- d
-#  for(stepi in plan) {
-#    res <- mutate_se(res,
-#                     stepi,
-#                     splitTerms = FALSE)
-#  }
+#  res <- mutate_seb(d, plan)
 

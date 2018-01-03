@@ -16,13 +16,16 @@
 #' upperBound <- 3.5
 #'
 #' datasets::iris %.>%
-#'   filter_se(., c("Sepal.Length >= 2 * Sepal.Width",
-#'                  "Petal.Length <= upperBound"))
+#'   filter_se(., qe(Sepal.Length >= 2 * Sepal.Width,
+#'                   Petal.Length <= upperBound))
 #'
 #'
 #' @export
 #'
 filter_se <- function(.data, filterTerms,  env=parent.frame()) {
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::filter_se first argument must be a data.frame or tbl")
+  }
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   filterQ <- lapply(filterTerms,

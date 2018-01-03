@@ -2,49 +2,33 @@
 % Please edit documentation in R/mutate_nse.R
 \name{mutate_nse}
 \alias{mutate_nse}
-\title{mutate non-standard evaluation interface.}
+\title{mutate non-standard evaluation interface (deprecated).}
 \usage{
 mutate_nse(.data, ..., mutate_nse_split_terms = TRUE,
-  mutate_nse_env = parent.frame())
+  mutate_nse_env = parent.frame(), mutate_nse_printPlan = FALSE)
 }
 \arguments{
 \item{.data}{data.frame}
 
-\item{...}{stringified expressions to mutate by.}
+\item{...}{expressions to mutate by.}
 
 \item{mutate_nse_split_terms}{logical, if TRUE into separate mutates (if FALSE instead, pass all at once to dplyr).}
 
 \item{mutate_nse_env}{environment to work in.}
+
+\item{mutate_nse_printPlan}{logical, if TRUE print the expression plan}
 }
 \value{
 .data with altered columns.
 }
 \description{
-Mutate a data frame by the mutateTerms.  Accepts arbitrary text as
-mutateTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
-Terms are vectors or lists of the form "lhs := rhs".
-Semantics are: terms are evaluated left to right if mutate_nse_split_terms==TRUE (the default).
+Mutate a data frame by the mutate terms from \code{...} (deprecated, please use \code{\link{mutate_se}}).
 }
 \details{
 Note: this method as the default setting \code{mutate_nse_split_terms = TRUE}, which while
 safer (avoiding certain known \code{dplyr}/\code{dblyr} issues) can be needlessly expensive
 and have its own "too long sequence" issues on remote-data systems
 (please see the side-notes of \url{http://winvector.github.io/FluidData/partition_mutate.html} for some references).
-}
-\examples{
-
-
-resCol1 <- "Sepal_Long"
-ratio <- 2
-compCol1 <- "Sepal.Width"
-
-
-datasets::iris \%.>\%
-  mutate_nse(., resCol1 := "Sepal.Length" >= ratio * compCol1,
-                "Petal_Short" := "Petal.Length" <= 3.5) \%.>\%
-  summary(.)
-
-
 }
 \seealso{
 \code{\link{mutate_se}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_at}}, \code{\link[wrapr]{:=}}

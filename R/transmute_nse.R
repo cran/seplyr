@@ -1,9 +1,7 @@
 
-#' transmute non-standard evaluation interface.
+#' transmute non-standard evaluation interface (deprecated).
 #'
-#' transmute a data frame by the transmuteTerms.  Accepts arbitrary text as
-#' transmuteTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
-#' Terms are vectors or lists of the form "lhs := rhs".
+#' transmute a data frame by the transmuteterms from \code{...} (deprecated, please use \code{\link{transmute_se}}).
 #'
 #' @seealso \code{\link{transmute_se}}, \code{\link[dplyr]{transmute}}, \code{\link[dplyr]{transmute_at}}, \code{\link[wrapr]{:=}}
 #'
@@ -12,23 +10,13 @@
 #' @param transmute_nse_env environment to work in.
 #' @return .data with altered columns(other columns dropped).
 #'
-#' @examples
-#'
-#'
-#' resCol1 <- "Sepal_Long"
-#' ratio <- 2
-#' compCol1 <- "Sepal.Width"
-#'
-#'
-#' datasets::iris %.>%
-#'   transmute_nse(., resCol1 := "Sepal.Length" >= ratio * compCol1,
-#'                 "Petal_Short" := "Petal.Length" <= 3.5) %.>%
-#'   summary(.)
-#'
-#'
 #' @export
 #'
 transmute_nse <- function(.data, ...,  transmute_nse_env = parent.frame()) {
+  .Deprecated(new = "transmute_se", old = "transmute_nse")
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::transmute_nse first argument must be a data.frame or tbl")
+  }
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   transmuteTerms <- substitute(list(...))
@@ -47,7 +35,7 @@ transmute_nse <- function(.data, ...,  transmute_nse_env = parent.frame()) {
         stop("transmute_nse terms must be of the form: sym := expr")
       }
       lhs[[i-1]] <- as.character(prep_deref(ei[[2]], transmute_nse_env))
-      rhs[[i-1]] <- deparse(prep_deref(ei[[3]], transmute_nse_env))
+      rhs[[i-1]] <- paste(deparse(prep_deref(ei[[3]], transmute_nse_env)), collapse = "\n")
     }
     res <- transmute_se(res, lhs := rhs, env=transmute_nse_env)
   }

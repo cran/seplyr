@@ -15,14 +15,17 @@
 #'
 #'
 #' datasets::iris %.>%
-#'   summarize_se(., c("Mean_Sepal_Length" := "mean(Sepal.Length)",
-#'                     "Max_Sepal_Length" := "max(Sepal.Length)")) %.>%
+#'   summarize_se(., qae(Mean_Sepal_Length := mean(Sepal.Length),
+#'                       Max_Sepal_Length := max(Sepal.Length))) %.>%
 #'   head(.)
 #'
 #'
 #' @export
 #'
 summarize_se <- function(.data, summarizeTerms,  env=parent.frame()) {
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::summarize_se first argument must be a data.frame or tbl")
+  }
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   summarizeQ <- lapply(summarizeTerms,

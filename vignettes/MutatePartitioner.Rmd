@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 [`seplyr::partition_mutate_qt()`](https://winvector.github.io/seplyr/reference/partition_mutate_qt.html) is
-a new service supplied by development version the [`R`](https://www.r-project.org) package [`seplyr`](https://winvector.github.io/seplyr/) (version `0.1.7` or higher).
+a service supplied by the package [`seplyr`](https://winvector.github.io/seplyr/) (version `0.5.0` or higher).
 
 `seplyr::partition_mutate_qt()` can partition a sequence of assignments so that no statement is using any value created in the same partition element or group.
 The partitions are in a format accepted by [`seplyr::mutate_se()`](https://winvector.github.io/seplyr/reference/mutate_se.html) for execution.
@@ -27,8 +27,8 @@ groups partition is *very* helpful when executing expressions on `SQL` based
 data interfaces (such as `Apache Spark`).
 
 The method used to partition expressions is
-to scan the remaining expressions in order taking any that: have all their values available from earlier groups and
-do not use a value formed in the current group. 
+to scan the remaining expressions in order taking any that: have all their values available from earlier groups,
+do not use a value formed in the current group, and do not overwrite a value formed in the current group.
 
 This partitioning method can lead to far fewer
 groups than the straightforward method of breaking up the sequence of expressions
@@ -96,12 +96,7 @@ To execute the statements on a data-item "`d`" (either an in-memory `data.frame`
 or a remote database or `Sparklyr` handle) we would do something like the following:
 
 ```{r exec, eval=FALSE}
-res <- d
-for(stepi in plan) {
-  res <- mutate_se(res, 
-                   stepi, 
-                   splitTerms = FALSE)
-}
+res <- mutate_seb(d, plan)
 ```
 
 A fully worked version of this example can be found [here](http://winvector.github.io/FluidData/partition_mutate_ex2.html).

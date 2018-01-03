@@ -4,16 +4,21 @@
 \alias{mutate_se}
 \title{mutate standard evaluation interface.}
 \usage{
-mutate_se(.data, mutateTerms, splitTerms = TRUE, env = parent.frame())
+mutate_se(.data, mutateTerms, ..., splitTerms = TRUE, env = parent.frame(),
+  printPlan = FALSE)
 }
 \arguments{
 \item{.data}{data.frame}
 
 \item{mutateTerms}{character vector of column expressions to mutate by.}
 
+\item{...}{force later terms to be bound by name}
+
 \item{splitTerms}{logical, if TRUE into separate mutates (if FALSE instead, pass all at once to dplyr).}
 
 \item{env}{environment to work in.}
+
+\item{printPlan}{logical, if TRUE print the expression plan}
 }
 \value{
 .data with altered columns.
@@ -37,8 +42,8 @@ resCol1 <- "Sepal_Long"
 limit <- 3.5
 
 datasets::iris \%.>\%
-  mutate_se(., c(resCol1 := "Sepal.Length >= 2 * Sepal.Width",
-                 "Petal_Short" := "Petal.Length <= limit")) \%.>\%
+  mutate_se(., qae(resCol1 := Sepal.Length >= 2 * Sepal.Width,
+                   Petal_Short := Petal.Length <= limit)) \%.>\%
   head(.)
 
 

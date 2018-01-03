@@ -1,8 +1,7 @@
 
-#' filter non-standard interface.
+#' Filter non-standard interface (deprecated).
 #'
-#' Filter a data frame by the filterTerms.  Accepts arbitrary text as
-#' filterTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
+#' Filter a data frame by the filter terms in \code{...} (deprecated, please use \code{\link{filter_se}}).
 #'
 #' @seealso \code{\link{filter_se}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{filter_at}}
 #'
@@ -11,22 +10,14 @@
 #' @param filter_nse_env environment to work in.
 #' @return .data filtered by columns named in filterTerms
 #'
-#' @examples
-#'
-#' upperBound <- 3.5
-#'
-#' datasets::iris %.>%
-#'   filter_nse(., "Sepal.Length" >= 2 * "Sepal.Width",
-#'                  "Petal.Length" <= upperBound) %.>%
-#'   head(.)
-#'
-#'
 #' @export
 #'
 filter_nse <- function(.data, ...,
                        filter_nse_env = parent.frame()) {
-  # convert char vector into spliceable vector
-  # from: https://github.com/tidyverse/rlang/issues/116
+  .Deprecated(new = "filter_se", old = "filter_nse")
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::filter_nse first argument must be a data.frame or tbl")
+  }
   filterTerms <- substitute(list(...))
   if(!all(names(filterTerms) %in% "")) {
     stop("seplyr::filter_nse() unexpected names in '...'")
@@ -38,7 +29,7 @@ filter_nse <- function(.data, ...,
     terms <- vector(len-1, mode='list')
     for(i in (2:len)) {
       ei <- filterTerms[[i]]
-      terms[[i-1]] <- deparse(prep_deref(ei, filter_nse_env))
+      terms[[i-1]] <- paste(deparse(prep_deref(ei, filter_nse_env)), collapse = "\n")
     }
     res <- filter_se(res, terms, env=filter_nse_env)
   }

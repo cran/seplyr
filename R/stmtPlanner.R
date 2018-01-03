@@ -4,11 +4,11 @@
 #'
 #' Find longest ordered not created and used in same block chains.
 #'
-#' The idea is: we assume the sequence of expressions is in a valid order
+#' We assume the sequence of expressions is in a valid order
 #' (all items available before use).  This function partitions the expressions
 #' into ordered longest "no new value used blocks" by greedily scanning forward
-#' and skipping any expressions that either use a value created in the current block
-#' or require a value not yet produced.
+#' remaining expressions in order taking any that: have all their values available from earlier groups,
+#' do not use a value formed in the current group, and do not overwrite a value formed in the current group.
 #'
 #' @param de frame of expressions
 #' @return ordered list of mutate_se assignment blocks
@@ -40,9 +40,10 @@ partition_mutate_d <- function(de) {
     formedInGroup <- NULL
     for(i in 1:n) {
       if( (de$group[[i]]<=0) &&  # available to take
-         (length(intersect(de$deps[[i]], formedInGroup))<=0) && # not using a new value
-         (length(setdiff(de$deps[[i]], have))<=0) # all pre-conditions met
-         ) {
+          (!(de$lhs[[i]] %in% formedInGroup)) && # not assigned to in this block
+          (length(intersect(de$deps[[i]], formedInGroup))<=0) && # not using a new value
+          (length(setdiff(de$deps[[i]], have))<=0) # all pre-conditions met
+      ) {
         formedInGroup <- c(formedInGroup, de$lhs[[i]])
         de$group[[i]] <- group
       }
@@ -70,7 +71,7 @@ partition_mutate_d <- function(de) {
 
 #' Scan for symbols.
 #'
-#' @param lexpr language item
+#' @param nexpr language item
 #' @return R language element with substitutions
 #'
 #' @noRd
@@ -108,11 +109,11 @@ find_symbols <- function(nexpr) {
 
 #' Partition a sequence of mutate commands into longest ordered no create/use blocks.
 #'
-#' The idea is: we assume the sequence of expressions is in a valid order
+#' We assume the sequence of expressions is in a valid order
 #' (all items available before use).  This function partitions the expressions
 #' into ordered longest "no new value used blocks" by greedily scanning forward
-#' and skipping any expressions that either use a value created in the current block
-#' or require a value not yet produced.
+#' remaining expressions in order taking any that: have all their values available from earlier groups,
+#' do not use a value formed in the current group, and do not overwrite a value formed in the current group.
 #' For an example please see \url{http://winvector.github.io/FluidData/partition_mutate.html}.
 #'
 #' @param exprs list of source-text of a sequence of mutate expressions.
@@ -188,6 +189,9 @@ quote_mutate <- function(...) {
 #'
 mutate_seb <- function(d, blocks,
                        env = parent.frame()) {
+  if(!(is.data.frame(d) || dplyr::is.tbl(d))) {
+    stop("seplyr::mutate_seb first argument must be a data.frame or tbl")
+  }
   for(bi in blocks) {
     d <- mutate_se(d, bi, splitTerms = FALSE, env = env)
   }
@@ -196,11 +200,11 @@ mutate_seb <- function(d, blocks,
 
 #' Partition a sequence of mutate commands into longest ordered no create/use blocks.
 #'
-#' The idea is: we assume the sequence of expressions is in a valid order
+#' We assume the sequence of expressions is in a valid order
 #' (all items available before use).  This function partitions the expressions
 #' into ordered longest "no new value used blocks" by greedily scanning forward
-#' and skipping any expressions that either use a value created in the current block
-#' or require a value not yet produced.
+#' remaining expressions in order taking any that: have all their values available from earlier groups,
+#' do not use a value formed in the current group, and do not overwrite a value formed in the current group.
 #' For an example please see \url{http://winvector.github.io/FluidData/partition_mutate.html}.
 #'
 #' Note: unlike \code{\link{mutate_nse}} \code{partition_mutate_qt} does not perform
@@ -281,6 +285,17 @@ partition_mutate_qt <- function(...) {
 #'    mutate_seb(., plan) %.>%
 #'    select_se(., grepdf('^ifebtest_.*', ., invert=TRUE))
 #'  print(res)
+#'
+#'  ## Note: with wrapr version 1.0.2 or greater
+#'  ## you can write this without quotes code as:
+#'  # program <- if_else_device(
+#'  #  testexpr = qe((a+b)>1),
+#'  #  thenexprs = c(
+#'  #    if_else_device(
+#'  #      testexpr = qe(runif(n()) >= 0.5),
+#'  #      thenexprs = qae(a := 0),
+#'  #      elseexprs = qae(b := 0)),
+#'  #    qae(edited := TRUE)))
 #'
 #' @export
 #'

@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-11-24" />
+<meta name="date" content="2018-01-02" />
 
 <title>Named Map Builder</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Named Map Builder</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-11-24</em></h4>
+<h4 class="date"><em>2018-01-02</em></h4>
 
 
 
@@ -107,22 +107,22 @@ datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">summarize_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean_Sepal_Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>,
                     <span class="st">&quot;Mean_Sepal_Width&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Width)&quot;</span>))</code></pre></div>
 <pre><code>## # A tibble: 3 x 3
-##      Species Mean_Sepal_Length Mean_Sepal_Width
-##       &lt;fctr&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-## 1     setosa             5.006            3.428
-## 2 versicolor             5.936            2.770
-## 3  virginica             6.588            2.974</code></pre>
+##   Species    Mean_Sepal_Length Mean_Sepal_Width
+##   &lt;fctr&gt;                 &lt;dbl&gt;            &lt;dbl&gt;
+## 1 setosa                  5.01             3.43
+## 2 versicolor              5.94             2.77
+## 3 virginica               6.59             2.97</code></pre>
 <p>Or even parametric code such as:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resultColumn &lt;-<span class="st"> &quot;summary_value&quot;</span>
 datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">group_by_se</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">summarize_se</span>(., resultColumn <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 3 x 2
-##      Species summary_value
-##       &lt;fctr&gt;         &lt;dbl&gt;
-## 1     setosa         5.006
-## 2 versicolor         5.936
-## 3  virginica         6.588</code></pre>
+##   Species    summary_value
+##   &lt;fctr&gt;             &lt;dbl&gt;
+## 1 setosa              5.01
+## 2 versicolor          5.94
+## 3 virginica           6.59</code></pre>
 <p>For more details please see: <a href="https://winvector.github.io/wrapr/reference/named_map_builder.html"><code>help(</code>:=<code>, package = 'wrapr')</code></a> and <a href="https://winvector.github.io/wrapr/reference/grapes-.-greater-than-grapes.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a>.</p>
 
 

@@ -1,9 +1,7 @@
 
-#' summarize non-standard evaluation interface.
+#' summarize non-standard evaluation interface (deprecated).
 #'
-#' summarize a data frame by the summarizeTerms.  Accepts arbitrary text as
-#' summarizeTerms to allow forms such as "Sepal.Length >= 2 * Sepal.Width".
-#' Terms are vectors or lists of the form "lhs := rhs".
+#' summarize a data frame by the summarize terms from \code{...} (deprecated, please use \code{\link{summarize_se}}).
 #'
 #' @seealso  \code{\link{summarize_se}}, \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{summarize_at}}, \code{\link[wrapr]{:=}}
 #'
@@ -12,21 +10,14 @@
 #' @param env environment to work in.
 #' @return .data with summarized columns.
 #'
-#' @examples
-#'
-#'
-#' resCol <- "Sepal_Mean_Length"
-#' varCol <- "Sepal.Length"
-#'
-#' datasets::iris %.>%
-#'   group_by_se(., 'Species') %.>%
-#'   summarize_nse(., resCol := mean(varCol),
-#'                    "max_Sepal_Length" := max("Sepal.Length"))
-#'
 #'
 #' @export
 #'
 summarize_nse <- function(.data, ..., env = parent.frame()) {
+  .Deprecated(new = "summarize_se", old = "summarize_nse")
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::summarize_nse first argument must be a data.frame or tbl")
+  }
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   summarizeTerms <- substitute(list(...))
@@ -45,7 +36,7 @@ summarize_nse <- function(.data, ..., env = parent.frame()) {
         stop("summarize_nse terms must be of the form: sym := expr")
       }
       lhs[[i-1]] <- as.character(prep_deref(ei[[2]], env))
-      rhs[[i-1]] <- deparse(prep_deref(ei[[3]], env))
+      rhs[[i-1]] <- paste(deparse(prep_deref(ei[[3]], env)), collapse = "\n")
     }
     res <- summarize_se(res, lhs := rhs, env=env)
   }

@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2017-11-24" />
+<meta name="date" content="2018-01-02" />
 
 <title>seplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">seplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2017-11-24</em></h4>
+<h4 class="date"><em>2018-01-02</em></h4>
 
 
 
@@ -163,22 +163,22 @@ datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span><span cl
 <span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;Sepal.Length&quot;</span>, 
                  <span class="st">&quot;Mean.Sepal.Width&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;Sepal.Width&quot;</span>))</code></pre></div>
 <pre><code>## # A tibble: 3 x 3
-##      Species Mean.Sepal.Length Mean.Sepal.Width
-##       &lt;fctr&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-## 1     setosa             5.006            3.428
-## 2 versicolor             5.936            2.770
-## 3  virginica             6.588            2.974</code></pre>
+##   Species    Mean.Sepal.Length Mean.Sepal.Width
+##   &lt;fctr&gt;                 &lt;dbl&gt;            &lt;dbl&gt;
+## 1 setosa                  5.01             3.43
+## 2 versicolor              5.94             2.77
+## 3 virginica               6.59             2.97</code></pre>
 <p>One also perform the above directly with <code>seplyr::summarize_se()</code> as follows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">group_by_se</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">summarize_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>, 
                     <span class="st">&quot;Mean.Sepal.Width&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Width)&quot;</span>))</code></pre></div>
 <pre><code>## # A tibble: 3 x 3
-##      Species Mean.Sepal.Length Mean.Sepal.Width
-##       &lt;fctr&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-## 1     setosa             5.006            3.428
-## 2 versicolor             5.936            2.770
-## 3  virginica             6.588            2.974</code></pre>
+##   Species    Mean.Sepal.Length Mean.Sepal.Width
+##   &lt;fctr&gt;                 &lt;dbl&gt;            &lt;dbl&gt;
+## 1 setosa                  5.01             3.43
+## 2 versicolor              5.94             2.77
+## 3 virginica               6.59             2.97</code></pre>
 <p>In addition to the series of adapters we also supply a number of useful new verbs including:</p>
 <ul>
 <li><code>group_summarize()</code> Binds grouping, arrangement, and summarization together for clear documentation of intent.</li>

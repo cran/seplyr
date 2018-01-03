@@ -15,14 +15,17 @@
 #'
 #'
 #' datasets::iris %.>%
-#'   transmute_se(., c("Sepal_Long" := "Sepal.Length >= 2 * Sepal.Width",
-#'                     "Petal_Short" := "Petal.Length <= 3.5")) %.>%
+#'   transmute_se(., qae(Sepal_Long := Sepal.Length >= 2 * Sepal.Width,
+#'                       Petal_Short := Petal.Length <= 3.5)) %.>%
 #'   summary(.)
 #'
 #'
 #' @export
 #'
 transmute_se <- function(.data, transmuteTerms,  env=parent.frame()) {
+  if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
+    stop("seplyr::transmute_se first argument must be a data.frame or tbl")
+  }
   # convert char vector into spliceable vector
   # from: https://github.com/tidyverse/rlang/issues/116
   transmuteQ <- lapply(transmuteTerms,

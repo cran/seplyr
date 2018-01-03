@@ -1,4 +1,13 @@
 
+# seplyr 0.5.1 2018-01-02
+
+ * mutate_se now uses partition_mutate_se.
+ * partition on re-assignment (if_else_device does this, but includes a re-use so was okay).
+ * Documentation improvements.
+ * More argument checking.
+ * Move to wrapr 1.0.2 (pick up qae() and qe()).
+ * Deprecate _nse forms.
+
 # seplyr 0.5.0 2017-11-24
 
  * mutate statement planner.
