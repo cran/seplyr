@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount, Win-Vector LLC" />
 
-<meta name="date" content="2018-01-02" />
+<meta name="date" content="2018-01-20" />
 
 <title>Mutate Partitioner</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Mutate Partitioner</h1>
 <h4 class="author"><em>John Mount, Win-Vector LLC</em></h4>
-<h4 class="date"><em>2018-01-02</em></h4>
+<h4 class="date"><em>2018-01-20</em></h4>
 
 
 
@@ -88,7 +88,7 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
    choice_a <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand_a<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 1</span>
     a_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_a, <span class="co"># first use of a new value 2</span>
                   <span class="st">'treatment'</span>, 
-                  <span class="st">'contol'</span>),
+                  <span class="st">'control'</span>),
     a_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_a, 
                   <span class="st">'control'</span>, 
                   <span class="st">'treatment'</span>),
@@ -96,7 +96,7 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
    choice_b <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand_b<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 3</span>
     b_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_b, <span class="co"># first use of a new value 4</span>
                   <span class="st">'treatment'</span>, 
-                  <span class="st">'contol'</span>),
+                  <span class="st">'control'</span>),
     b_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_b, 
                   <span class="st">'control'</span>, 
                   <span class="st">'treatment'</span>),
@@ -104,7 +104,7 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
    choice_c <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand_c<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 5</span>
     c_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_c, <span class="co"># first use of a new value 6</span>
                   <span class="st">'treatment'</span>, 
-                  <span class="st">'contol'</span>),
+                  <span class="st">'control'</span>),
     c_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_c, 
                   <span class="st">'control'</span>, 
                   <span class="st">'treatment'</span>),
@@ -112,7 +112,7 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
    choice_d <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand_d<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 7</span>
     d_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_d, <span class="co"># first use of a new value 8</span>
                   <span class="st">'treatment'</span>, 
-                  <span class="st">'contol'</span>),
+                  <span class="st">'control'</span>),
     d_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_d, 
                   <span class="st">'control'</span>, 
                   <span class="st">'treatment'</span>),
@@ -120,7 +120,7 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
    choice_e <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand_e<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 9</span>
     e_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_e, <span class="co"># first use of a new value 10</span>
                   <span class="st">'treatment'</span>, 
-                  <span class="st">'contol'</span>),
+                  <span class="st">'control'</span>),
     e_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice_e, 
                   <span class="st">'control'</span>, 
                   <span class="st">'treatment'</span>)
@@ -139,29 +139,135 @@ plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $group00003</span>
 <span class="co">#&gt;                                            a_1 </span>
-<span class="co">#&gt;  &quot;ifelse(choice_a, \&quot;treatment\&quot;, \&quot;contol\&quot;)&quot; </span>
+<span class="co">#&gt; &quot;ifelse(choice_a, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
 <span class="co">#&gt;                                            a_2 </span>
 <span class="co">#&gt; &quot;ifelse(choice_a, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
 <span class="co">#&gt;                                            b_1 </span>
-<span class="co">#&gt;  &quot;ifelse(choice_b, \&quot;treatment\&quot;, \&quot;contol\&quot;)&quot; </span>
+<span class="co">#&gt; &quot;ifelse(choice_b, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
 <span class="co">#&gt;                                            b_2 </span>
 <span class="co">#&gt; &quot;ifelse(choice_b, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
 <span class="co">#&gt;                                            c_1 </span>
-<span class="co">#&gt;  &quot;ifelse(choice_c, \&quot;treatment\&quot;, \&quot;contol\&quot;)&quot; </span>
+<span class="co">#&gt; &quot;ifelse(choice_c, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
 <span class="co">#&gt;                                            c_2 </span>
 <span class="co">#&gt; &quot;ifelse(choice_c, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
 <span class="co">#&gt;                                            d_1 </span>
-<span class="co">#&gt;  &quot;ifelse(choice_d, \&quot;treatment\&quot;, \&quot;contol\&quot;)&quot; </span>
+<span class="co">#&gt; &quot;ifelse(choice_d, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
 <span class="co">#&gt;                                            d_2 </span>
 <span class="co">#&gt; &quot;ifelse(choice_d, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
 <span class="co">#&gt;                                            e_1 </span>
-<span class="co">#&gt;  &quot;ifelse(choice_e, \&quot;treatment\&quot;, \&quot;contol\&quot;)&quot; </span>
+<span class="co">#&gt; &quot;ifelse(choice_e, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
 <span class="co">#&gt;                                            e_2 </span>
 <span class="co">#&gt; &quot;ifelse(choice_e, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot;</span></code></pre></div>
 <p>Notice <code>seplyr::partition_mutate_qt()</code> split the work into 3 groups. The straightforward method (with no statement re-ordering) of splitting into non-dependent groups would have to split the mutate at each first use of a new value: yielding 10 splits or 11 mutate stages. For why a low number of execution stages is important please see <a href="http://winvector.github.io/FluidData/partition_mutate.html">here</a>.</p>
 <p>To execute the statements on a data-item “<code>d</code>” (either an in-memory <code>data.frame</code> or a remote database or <code>Sparklyr</code> handle) we would do something like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">mutate_seb</span>(d, plan)</code></pre></div>
 <p>A fully worked version of this example can be found <a href="http://winvector.github.io/FluidData/partition_mutate_ex2.html">here</a>.</p>
+<p>Note re-using variable values does limit the planner’s ability to efficiently partition the the statement. The planner still emits safe and correct code, but unless it were to be allowed to introduce new variable names it must break sequences in more places (note prior to <code>seplyr</code> version <code>0.5.2</code> some dependencies were missed, leading to possibly unsafe code). We show this effect below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plan &lt;-<span class="st"> </span><span class="kw">partition_mutate_qt</span>(
+  rand <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rand</span>(),
+   choice <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 1</span>
+    a_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, <span class="co"># first use of a new value 2</span>
+                  <span class="st">'treatment'</span>, 
+                  <span class="st">'control'</span>),
+    a_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, 
+                  <span class="st">'control'</span>, 
+                  <span class="st">'treatment'</span>),
+  rand <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rand</span>(),
+   choice <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 3</span>
+    b_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, <span class="co"># first use of a new value 4</span>
+                  <span class="st">'treatment'</span>, 
+                  <span class="st">'control'</span>),
+    b_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, 
+                  <span class="st">'control'</span>, 
+                  <span class="st">'treatment'</span>),
+  rand <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rand</span>(),
+   choice <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 5</span>
+    c_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, <span class="co"># first use of a new value 6</span>
+                  <span class="st">'treatment'</span>, 
+                  <span class="st">'control'</span>),
+    c_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, 
+                  <span class="st">'control'</span>, 
+                  <span class="st">'treatment'</span>),
+  rand <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rand</span>(),
+   choice <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 7</span>
+    d_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, <span class="co"># first use of a new value 8</span>
+                  <span class="st">'treatment'</span>, 
+                  <span class="st">'control'</span>),
+    d_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, 
+                  <span class="st">'control'</span>, 
+                  <span class="st">'treatment'</span>),
+  rand <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rand</span>(),
+   choice <span class="op">:</span><span class="er">=</span><span class="st"> </span>rand<span class="op">&gt;=</span><span class="fl">0.5</span>, <span class="co"># first use of a new value 9</span>
+    e_<span class="dv">1</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, <span class="co"># first use of a new value 10</span>
+                  <span class="st">'treatment'</span>, 
+                  <span class="st">'control'</span>),
+    e_<span class="dv">2</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ifelse</span>(choice, 
+                  <span class="st">'control'</span>, 
+                  <span class="st">'treatment'</span>)
+  )
+
+<span class="kw">print</span>(plan)
+<span class="co">#&gt; $group00001</span>
+<span class="co">#&gt;     rand </span>
+<span class="co">#&gt; &quot;rand()&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00002</span>
+<span class="co">#&gt;        choice </span>
+<span class="co">#&gt; &quot;rand &gt;= 0.5&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00003</span>
+<span class="co">#&gt;                                          a_1 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
+<span class="co">#&gt;                                          a_2 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
+<span class="co">#&gt;                                         rand </span>
+<span class="co">#&gt;                                     &quot;rand()&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00004</span>
+<span class="co">#&gt;        choice </span>
+<span class="co">#&gt; &quot;rand &gt;= 0.5&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00005</span>
+<span class="co">#&gt;                                          b_1 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
+<span class="co">#&gt;                                          b_2 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
+<span class="co">#&gt;                                         rand </span>
+<span class="co">#&gt;                                     &quot;rand()&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00006</span>
+<span class="co">#&gt;        choice </span>
+<span class="co">#&gt; &quot;rand &gt;= 0.5&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00007</span>
+<span class="co">#&gt;                                          c_1 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
+<span class="co">#&gt;                                          c_2 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
+<span class="co">#&gt;                                         rand </span>
+<span class="co">#&gt;                                     &quot;rand()&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00008</span>
+<span class="co">#&gt;        choice </span>
+<span class="co">#&gt; &quot;rand &gt;= 0.5&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00009</span>
+<span class="co">#&gt;                                          d_1 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
+<span class="co">#&gt;                                          d_2 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span>
+<span class="co">#&gt;                                         rand </span>
+<span class="co">#&gt;                                     &quot;rand()&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00010</span>
+<span class="co">#&gt;        choice </span>
+<span class="co">#&gt; &quot;rand &gt;= 0.5&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $group00011</span>
+<span class="co">#&gt;                                          e_1 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span>
+<span class="co">#&gt;                                          e_2 </span>
+<span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot;</span></code></pre></div>
 
 
 
