@@ -30,7 +30,7 @@ d %>%
 ## ------------------------------------------------------------------------
 packageVersion("dbplyr")
 packageVersion("DBI")
-packageVersion("RSQlite")
+packageVersion("RSQLite")
 
 db <- DBI::dbConnect(RSQLite::SQLite(), 
                      ":memory:")

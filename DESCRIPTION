@@ -2,8 +2,8 @@ Package: seplyr
 Type: Package
 Title: Improved Standard Evaluation Interfaces for Common Data
         Manipulation Tasks
-Version: 0.5.2
-Date: 2018-01-20
+Version: 0.5.3
+Date: 2018-01-21
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -32,8 +32,8 @@ Suggests: knitr, rmarkdown, testthat,
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2018-01-20 15:32:34 UTC; johnmount
+Packaged: 2018-01-21 17:51:03 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2018-01-20 22:22:50 UTC
+Date/Publication: 2018-01-21 18:11:45 UTC
