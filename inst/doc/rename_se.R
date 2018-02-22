@@ -16,11 +16,6 @@ datasets::mtcars %.>%
   rename_se(., c("cylinders" := "cyl", "gears" := "gear")) %.>%
   head(.)
 
-## ----rename3-------------------------------------------------------------
-datasets::mtcars %>%
-  rename_at(names(mp), funs(function(si) { mp[si] })) %>%
-  head()
-
 ## ----swap----------------------------------------------------------------
 data.frame(a = 1, b = 2) %.>%
   rename_se(., c('a', 'b') := c('b', 'a'))

@@ -2,8 +2,8 @@ Package: seplyr
 Type: Package
 Title: Improved Standard Evaluation Interfaces for Common Data
         Manipulation Tasks
-Version: 0.5.3
-Date: 2018-01-21
+Version: 0.5.4
+Date: 2018-02-21
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -24,7 +24,7 @@ Description: The 'seplyr' (standard evaluation plying) package supplies improved
     (which simulates per-row if-else blocks in expression sequences).
 License: GPL-3
 Encoding: UTF-8
-Depends: wrapr (>= 1.1.0)
+Depends: wrapr (>= 1.2.0)
 Imports: dplyr (>= 0.7.4), rlang, dbplyr, DBI, RSQLite
 LazyData: true
 RoxygenNote: 6.0.1
@@ -32,8 +32,8 @@ Suggests: knitr, rmarkdown, testthat,
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2018-01-21 17:51:03 UTC; johnmount
+Packaged: 2018-02-22 03:31:02 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2018-01-21 18:11:45 UTC
+Date/Publication: 2018-02-22 18:06:59 UTC

@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2018-01-21" />
+<meta name="date" content="2018-02-21" />
 
 <title>factor_mutate</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">factor_mutate</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-01-21</em></h4>
+<h4 class="date"><em>2018-02-21</em></h4>
 
 
 
@@ -129,7 +129,7 @@ d <span class="op">%&gt;%</span>
 </table>
 <p>However “in memory” is not the only place <code>dplyr</code> is promoted and used. <code>dplyr</code> is also often used to talk to <code>SQL</code> back ends (such as <code>Spark</code> and databases). When we try the same <code>mutate()</code> in a database context we, currently, get a different (and wrong) result. This establishes the example <code>mutate()</code> statement is at best unsafe.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">packageVersion</span>(<span class="st">&quot;dbplyr&quot;</span>)
-<span class="co">#&gt; [1] '1.2.0'</span>
+<span class="co">#&gt; [1] '1.2.1'</span>
 <span class="kw">packageVersion</span>(<span class="st">&quot;DBI&quot;</span>)
 <span class="co">#&gt; [1] '0.7'</span>
 <span class="kw">packageVersion</span>(<span class="st">&quot;RSQLite&quot;</span>)

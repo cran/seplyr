@@ -37,13 +37,6 @@ datasets::mtcars %.>%
   arrange_se(., orderTerms) %>% 
   head(.)
 
-## ----atex----------------------------------------------------------------
-datasets::iris %.>%
-  group_by_at(., "Species") %>%
-  summarize_at(., c("Sepal.Length", "Sepal.Width"), funs(mean)) %.>%
-  rename_se(., c("Mean.Sepal.Length" := "Sepal.Length", 
-                 "Mean.Sepal.Width" := "Sepal.Width"))
-
 ## ----atexse--------------------------------------------------------------
 datasets::iris %.>%
   group_by_se(., "Species") %.>%

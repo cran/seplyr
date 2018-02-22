@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2018-01-21" />
+<meta name="date" content="2018-02-21" />
 
 <title>seplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">seplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-01-21</em></h4>
+<h4 class="date"><em>2018-02-21</em></h4>
 
 
 
@@ -156,19 +156,7 @@ datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span><span cl
 <li><code>deselect()</code></li>
 <li><code>rename_mp()</code></li>
 </ul>
-<p>One can combine <code>seplyr</code> methods with standard <code>dplyr</code> methods (such as <code>summarize_at()</code>):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">group_by_at</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarize_at</span>(., <span class="kw">c</span>(<span class="st">&quot;Sepal.Length&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>), <span class="kw">funs</span>(mean)) <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;Sepal.Length&quot;</span>, 
-                 <span class="st">&quot;Mean.Sepal.Width&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;Sepal.Width&quot;</span>))</code></pre></div>
-<pre><code>## # A tibble: 3 x 3
-##   Species    Mean.Sepal.Length Mean.Sepal.Width
-##   &lt;fct&gt;                  &lt;dbl&gt;            &lt;dbl&gt;
-## 1 setosa                  5.01             3.43
-## 2 versicolor              5.94             2.77
-## 3 virginica               6.59             2.97</code></pre>
-<p>One also perform the above directly with <code>seplyr::summarize_se()</code> as follows.</p>
+<p>Here is a example using <code>seplyr::summarize_se()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">group_by_se</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%.&gt;%</span>
 <span class="st">  </span><span class="kw">summarize_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean.Sepal.Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>, 
