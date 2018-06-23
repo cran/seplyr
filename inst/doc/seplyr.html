@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2018-03-13" />
+<meta name="date" content="2018-06-23" />
 
 <title>seplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">seplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-03-13</em></h4>
+<h4 class="date"><em>2018-06-23</em></h4>
 
 
 
@@ -82,7 +82,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In <code>dplyr</code> if you know the names of columns when you are writing code you can write code such as the following.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
 <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.7.4'</code></pre>
+<pre><code>## [1] '0.7.5'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(cyl, <span class="kw">desc</span>(gear)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">head</span>()</code></pre></div>
@@ -179,7 +179,7 @@ datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span><span cl
 </ul>
 <p><code>seplyr</code> is designed to be a thin package that passes work to <code>dplyr</code>. If you want a package that works around <code>dplyr</code> implementation differences on different data sources I suggest trying our own <a href="https://CRAN.R-project.org/package=replyr"><code>replyr</code></a> package. Another alternative is using <a href="https://github.com/WinVector/wrapr/blob/master/README.md"><code>wrapr::let()</code></a>.</p>
 <p><code>seplyr</code> methods are short and have examples in their help, so always try both help and printing the method (for example: <code>help(select_se)</code> and <code>print(select_se)</code>). Printing methods can show you how to use <code>dplyr</code> directly with <code>rlang</code>/<code>tidyeval</code> methodology (allowing you to skip <code>seplyr</code>).</p>
-<p>Some inspiration comes from <a href="https://gist.github.com/skranz/9681509">Sebastian Kranz’s <code>s_dplyr</code></a>. Please see <a href="https://winvector.github.io/wrapr/reference/grapes-.-greater-than-grapes.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
+<p>Some inspiration comes from <a href="https://gist.github.com/skranz/9681509">Sebastian Kranz’s <code>s_dplyr</code></a>. Please see <a href="https://winvector.github.io/wrapr/reference/dot_arrow.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
 
 
 
