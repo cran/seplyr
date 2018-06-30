@@ -1,6 +1,6 @@
-fbab59504d315aa79574b79a856cb4d9 *DESCRIPTION
+f0a6348f6fc5c984cb692f859e7714b8 *DESCRIPTION
 c87babfcb86b264aea29bdf91a9590f8 *NAMESPACE
-bbd1c603e66781a67460c6f9195a06ca *NEWS.md
+5da51a50ecde51ff7e5e7d02c2ecc65a *NEWS.md
 9f9f881525654dacefad125f3fe5e465 *R/add_group_indices.R
 b6c6084f1d5ebab15338422c6a6f4a03 *R/add_group_summaries.R
 b58a5abf31beb527604c01ec8aaf9b6b *R/add_rank_indices.R
@@ -9,7 +9,7 @@ ee5cbf743e62a0d8bc0195b9537ead07 *R/complete_se.R
 303973f3c5262a1687b6d28a470d0829 *R/distinct_se.R
 a85fe6658261ca215a27ef350094447f *R/filter_nse.R
 e007e0d03903b4b6158a2691695781a7 *R/filter_se.R
-ff3c804a5a9f0dc6150e2c3558199887 *R/gather_se.R
+b3963ab4769bacb83f16a94d12c5361b *R/gather_se.R
 976a935ce289a8cd159bd2335fcb46ee *R/group_by_se.R
 243bacf2deb60b1a6beb02546bebb23b *R/group_indices_se.R
 0883771958b2b773a0d283fffcc74593 *R/group_summarize.R
@@ -20,7 +20,7 @@ ff3c804a5a9f0dc6150e2c3558199887 *R/gather_se.R
 39cadabfd1dd26b803f3366381fd7908 *R/package.R
 0ac60bb22c43fe365b31a24883386352 *R/rename_se.R
 d1445a854c6ff326d7d204f35a4aa78c *R/select_se.R
-db8009725d93090fc595d523f0643e80 *R/spread_se.R
+488167e1f192c1e902a0d0d7ee246466 *R/spread_se.R
 d30e5b1cf8641abb1548907e8781bd46 *R/stmtPlanner.R
 fc5634d8625fc36a9168e727c1363a9f *R/summarize_nse.R
 372ecaaf46cf12eee992c9c64a4445b2 *R/summarize_se.R
@@ -58,7 +58,7 @@ b375c3a32ee82f31752f1c53c14db66e *man/distinct_se.Rd
 cc7c40445b02282cdd3a75fe3a9ec0c8 *man/factor_mutate.Rd
 272a45ca50de15551f2eb7ddf7c8ef7d *man/filter_nse.Rd
 d7a5a0704bdb8213e5167f40727aeb74 *man/filter_se.Rd
-7da7ede340f2621cb93c45645a226a0c *man/gather_se.Rd
+854dad1ca4704d855082aa96ed437b2c *man/gather_se.Rd
 d3ab15a54818b9d0a1859bc71d06eeff *man/group_by_se.Rd
 f9fa0d424236a67e80c396a312e04e08 *man/group_indices_se.Rd
 ce3afd4f8c8cb4d7067db8256d2546e0 *man/group_summarize.Rd
@@ -74,7 +74,7 @@ f49462137b6a908eb4282087ca380abc *man/reexports.Rd
 d32c992abc76b62ea76f02b98fc27239 *man/rename_se.Rd
 901f10d0de9cc13d38896dcff7670789 *man/select_se.Rd
 9188cf34f36f1efea4acc6bc8bec3f76 *man/seplyr.Rd
-4908f94759bde185909e0876066f8a62 *man/spread_se.Rd
+21699b90f5ba04b1d16eea8414209be2 *man/spread_se.Rd
 288014ae5733484f6d14bbd46a69bf00 *man/summarize_nse.Rd
 d382b0f001f641698acd0a799090dded *man/summarize_se.Rd
 fcb726f235943d28f94d86450a45432a *man/tally_se.Rd
