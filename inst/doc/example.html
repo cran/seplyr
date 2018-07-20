@@ -10,11 +10,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="John Mount" />
+<meta name="author" content="author" />
 
-<meta name="date" content="2018-07-20" />
+<meta name="date" content="2018-07-18" />
 
-<title>Named Map Builder</title>
+<title>title</title>
 
 
 
@@ -68,62 +68,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Named Map Builder</h1>
-<h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-07-20</em></h4>
+<h1 class="title toc-ignore">title</h1>
+<h4 class="author"><em>author</em></h4>
+<h4 class="date"><em>2018-07-18</em></h4>
 
 
 
-<p><a href="https://github.com/WinVector/wrapr"><code>wrapr</code></a> introduces an operator called “named map builder” that is written as “<code>:=</code>”. Named map builder is a <em>very</em> simple bit of code that performs a very simple task: it adds names to vectors or lists (making them work more like maps).</p>
-<p>Here are some examples:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;wrapr&quot;</span>)
-
-<span class="st">'a'</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">5</span></code></pre></div>
-<pre><code>## a 
-## 5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">'a'</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">5</span>, <span class="st">'b'</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">6</span>)</code></pre></div>
-<pre><code>## a b 
-## 5 6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">6</span>)</code></pre></div>
-<pre><code>## a b 
-## 5 6</code></pre>
-<p>The left-side argument of the <code>:=</code> operator is called “the names”, and the right-side argument is called “the values”. The <code>:=</code> operators returns the values with the names set to names.</p>
-<p>A key use of the named map builder is the following:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">key =<span class="st"> 'keycode'</span>
-key <span class="op">:</span><span class="er">=</span><span class="st"> 'value'</span></code></pre></div>
-<pre><code>## keycode 
-## &quot;value&quot;</code></pre>
-<p>Notice the value inside the variable <code>key</code> was used as the array name, this differs from what is easily done with <code>R</code>’s native <code>c(key = 'value')</code> style notation.</p>
-<p>A great use of the <code>:=</code> operator is using it to conveniently build arguments lists for functions such as <code>seplyr::mutate_se()</code>. This works for simple explicit code such as the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)
-
-datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">summarize_se</span>(., <span class="st">&quot;Mean_Sepal_Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>)</code></pre></div>
-<pre><code>##   Mean_Sepal_Length
-## 1          5.843333</code></pre>
-<p>Slightly more complicated code such as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">group_by_se</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">summarize_se</span>(., <span class="kw">c</span>(<span class="st">&quot;Mean_Sepal_Length&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>,
-                    <span class="st">&quot;Mean_Sepal_Width&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Width)&quot;</span>))</code></pre></div>
-<pre><code>## # A tibble: 3 x 3
-##   Species    Mean_Sepal_Length Mean_Sepal_Width
-##   &lt;fct&gt;                  &lt;dbl&gt;            &lt;dbl&gt;
-## 1 setosa                  5.01             3.43
-## 2 versicolor              5.94             2.77
-## 3 virginica               6.59             2.97</code></pre>
-<p>Or even parametric code such as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resultColumn &lt;-<span class="st"> &quot;summary_value&quot;</span>
-datasets<span class="op">::</span>iris <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">group_by_se</span>(., <span class="st">&quot;Species&quot;</span>) <span class="op">%.&gt;%</span>
-<span class="st">  </span><span class="kw">summarize_se</span>(., resultColumn <span class="op">:</span><span class="er">=</span><span class="st"> &quot;mean(Sepal.Length)&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 3 x 2
-##   Species    summary_value
-##   &lt;fct&gt;              &lt;dbl&gt;
-## 1 setosa              5.01
-## 2 versicolor          5.94
-## 3 virginica           6.59</code></pre>
-<p>For more details please see: <a href="https://winvector.github.io/wrapr/reference/named_map_builder.html"><code>help(</code>:=<code>, package = 'wrapr')</code></a> and <a href="https://winvector.github.io/wrapr/reference/dot_arrow.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a>.</p>
+<p>Running <code>devtools::build_vignettes()</code> twice in a row with this file as a vignette errors out because the assignment “<code>ChickWeight &lt;- NULL</code>” stays live between runs and then obscures the original <code>datasets::ChickWeight</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;ChickWeight&quot;</span>)
+ChickWeight &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(ChickWeight, <span class="dt">Time =</span> Time<span class="op">+</span><span class="dv">1</span>)
+ChickWeight &lt;-<span class="st"> </span><span class="ot">NULL</span></code></pre></div>
 
 
 

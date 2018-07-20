@@ -1,5 +1,10 @@
 
-# seplyr 0.5.7 2018-06-30
+# seplyr 0.5.9 2018-07-20
+
+ * dplyr::one_of() option.
+ * Documentation fixes.
+
+# seplyr 0.5.8 2018-06-30
 
  * Fix NSE interface to gather()/spread().
 
