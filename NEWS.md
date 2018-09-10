@@ -1,4 +1,11 @@
 
+# seplyr 0.8.0 2018-09-10
+
+ * more expression partition work
+ * special-case empty grouping and arranging.
+ * check more about arguments in arrange_se().
+ * add .by_group argument to arrange_se().
+
 # seplyr 0.5.9 2018-07-20
 
  * dplyr::one_of() option.
