@@ -9,7 +9,7 @@
 #' @param .data data.frame
 #' @param summarizeTerms character vector of column expressions to summarize by.
 #' @param ... force later terms to be bound by name
-#' @param summarize_se logical, if TRUE warn about possible name collisions.
+#' @param warn logical, if TRUE warn about possible name collisions.
 #' @param env environment to work in.
 #' @return .data with summarizeTerms summarization applied.
 #'
@@ -34,13 +34,17 @@
 #'
 summarize_se <- function(.data, summarizeTerms,
                          ...,
-                         summarize_se = TRUE,
+                         warn = TRUE,
                          env = parent.frame()) {
   wrapr::stop_if_dot_args(substitute(list(...)), "seplyr::summarize_se")
+  force(env)
   if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
     stop("seplyr::summarize_se first argument must be a data.frame or tbl")
   }
-  if(summarize_se) {
+  if(!check_is_char_vec_or_listscal(summarizeTerms)) {
+    stop("seplyr::summarize_se summarizeTerms must be a character vector or list of character scalars")
+  }
+  if(warn) {
     plan <- partition_mutate_se(summarizeTerms)
     if(length(plan)!=1) {
       warning(paste("seplyr::summarize_se possibly confusing column name re-use",

@@ -1,4 +1,12 @@
 
+# seplyr 0.8.2 2018-09-25
+
+ * force parent.frame().
+ * stricter argument type checking.
+ * warnings on mutate(), summarize(), and transmute().
+ * fix some argument names.
+ * start on select_nse().
+
 # seplyr 0.8.1 2018-09-18
 
  * Switch from parse_quosure() to parse_quo() ( https://github.com/WinVector/seplyr/issues/3 ).

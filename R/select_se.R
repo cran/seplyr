@@ -1,6 +1,7 @@
-#' select standard interface.
+
+#' Select columns standard interface.
 #'
-#' select columns.  To remove columns please see \code{\link{deselect}}.
+#' Select columns.  To remove columns please see \code{\link{deselect}}.  Also accepts -column notation.
 #'
 #' @seealso \code{\link{deselect}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{select_at}}
 #'
@@ -32,9 +33,14 @@ select_se <- function(.data, colNames) {
   # parse_expr sees into global environment
   #  https://github.com/tidyverse/dplyr/issues/3006
   # updated: https://github.com/WinVector/seplyr/issues/3
+  if(!is.character(colNames)) {
+    stop("seplyr::select_se colNames must be a character vector")
+  }
   env <- new.env(parent = emptyenv())
-  assign('-', `-`, envir = env)
-  assign('(', `(`, envir = env)
+  penv <- parent.frame()
+  for(sym in c("-", "c", ":", "(")) {
+    assign(sym, get(sym, envir = penv), envir = env)
+  }
   colSyms <- lapply(colNames,
                     function(si) {
                       rlang::parse_quo(si,
@@ -42,6 +48,8 @@ select_se <- function(.data, colNames) {
                     })
   dplyr::select(.data, !!!colSyms)
 }
+
+
 
 #' deselect standard interface.
 #'
@@ -66,6 +74,9 @@ select_se <- function(.data, colNames) {
 deselect <- function(.data, colNames) {
   if(!(is.data.frame(.data) || dplyr::is.tbl(.data))) {
     stop("seplyr::deselect first argument must be a data.frame or tbl")
+  }
+  if(!is.character(colNames)) {
+    stop("seplyr::deselect colNames must be a character vector")
   }
   # select(.data, one_of(colNames))
   # convert char vector into spliceable vector
