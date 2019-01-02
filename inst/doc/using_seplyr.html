@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2018-09-25" />
+<meta name="date" content="2019-01-02" />
 
 <title>Using seplyr to Program Over dplyr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using seplyr to Program Over dplyr</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-09-25</em></h4>
+<h4 class="date"><em>2019-01-02</em></h4>
 
 
 
@@ -81,7 +81,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Suppose you had worked out a <code>dplyr</code> pipeline that performed an analysis you were interested in. For an example we could take something similar to one of the examples from the <a href="https://blog.rstudio.com/2017/06/13/dplyr-0-7-0/"><code>dplyr</code> <code>0.7.0</code> announcement</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))
 <span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.7.6'</code></pre>
+<pre><code>## [1] '0.7.8'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(starwars)</code></pre></div>
 <pre><code>##  [1] &quot;name&quot;       &quot;height&quot;     &quot;mass&quot;       &quot;hair_color&quot; &quot;skin_color&quot;
 ##  [6] &quot;eye_color&quot;  &quot;birth_year&quot; &quot;gender&quot;     &quot;homeworld&quot;  &quot;species&quot;   
@@ -197,18 +197,18 @@ starwars <span class="op">%&gt;%</span><span class="st"> </span>
 </div>
 <p>The above code appears to work, unless you take the extra steps of actually running it and examining the results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">packageVersion</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.7.6'</code></pre>
+<pre><code>## [1] '0.7.8'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">packageVersion</span>(<span class="st">&quot;rlang&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.2.2'</code></pre>
+<pre><code>## [1] '0.3.0.1'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">packageVersion</span>(<span class="st">&quot;tidyselect&quot;</span>)</code></pre></div>
-<pre><code>## [1] '0.2.4'</code></pre>
+<pre><code>## [1] '0.2.5'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_var &lt;-<span class="st"> &quot;homeworld&quot;</span>
 
 starwars <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(.data[[my_var]]) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(height<span class="op">:</span>mass), mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 49 x 3
-##    my_var         height  mass
+##    homeworld      height  mass
 ##    &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
 ##  1 Alderaan         176.  64  
 ##  2 Aleen Minor       79   15  
@@ -252,6 +252,8 @@ starwars <span class="op">%&gt;%</span>
 starwars <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(.data[[<span class="op">!!</span>my_var]]) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(height<span class="op">:</span>mass), mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Warning: It is no longer necessary to unquote within the `.data` pronoun
+## This warning is displayed once per session.</code></pre>
 <pre><code>## # A tibble: 49 x 3
 ##    homeworld      height  mass
 ##    &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
@@ -324,7 +326,20 @@ starwars_plus <span class="op">%&gt;%</span>
 starwars_plus <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(.data[[my_var]]) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(height<span class="op">:</span>mass), mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Error in mutate_impl(.data, dots): Evaluation error: Must subset the data pronoun with a string.</code></pre>
+<pre><code>## # A tibble: 49 x 3
+##    homeworld      height  mass
+##    &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
+##  1 Alderaan         176.  64  
+##  2 Aleen Minor       79   15  
+##  3 Bespin           175   79  
+##  4 Bestine IV       180  110  
+##  5 Cato Neimoidia   191   90  
+##  6 Cerea            198   82  
+##  7 Champala         196  NaN  
+##  8 Chandrila        150  NaN  
+##  9 Concord Dawn     183   79  
+## 10 Corellia         175   78.5
+## # ... with 39 more rows</code></pre>
 <p>The above <em>might</em> be acceptable in interactive work, if we assume the user knows the names of all of the columns in the <code>data.frame</code> and therefore can be held responsible for avoiding column name to variable coincidences. Or more realistically: the user is working interactively in the sense they are there to alter and re-run the code if they happen to notice the failure. However, this is not a safe state of affairs in re-usable functions or packages: which should work even if their are naming coincidences in thought to be irrelevant extra columns.</p>
 <p><code>rlang</code> does have methods to write unambiguous code such as in:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span>

@@ -1,4 +1,10 @@
 
+# seplyr 0.8.3 2019-01-02
+
+ * work around https://github.com/tidyverse/dplyr/issues/4062 .
+ * more select_nse() work.
+ * fix non-grouped xes of group_summarize().
+
 # seplyr 0.8.2 2018-09-25
 
  * force parent.frame().

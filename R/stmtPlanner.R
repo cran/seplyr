@@ -1,5 +1,8 @@
 
 
+#' @importFrom dplyr n
+NULL
+
 #' partition expressions
 #'
 #' Find longest ordered not created and used in same block chains.
@@ -315,6 +318,7 @@ factor_mutate <- function(...,
 #'
 #' @examples
 #'
+#'  suppressPackageStartupMessages(library("dplyr"))
 #'  # Example: clear one of a or b in any row where both are set.
 #'  d <- data.frame(a = c(0, 0, 1, 1, 1, 1, 1, 1, 1, 1),
 #'                  b = c(0, 1, 0, 1, 1, 1, 1, 1, 1, 1),
