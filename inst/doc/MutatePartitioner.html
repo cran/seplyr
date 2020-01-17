@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="John Mount, Win-Vector LLC" />
 
-<meta name="date" content="2019-07-24" />
+<meta name="date" content="2020-01-16" />
 
 <title>Mutate Partitioner</title>
 
@@ -96,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -303,7 +303,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Mutate Partitioner</h1>
 <h4 class="author">John Mount, Win-Vector LLC</h4>
-<h4 class="date">2019-07-24</h4>
+<h4 class="date">2020-01-16</h4>
 
 
 
@@ -365,32 +365,30 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-50" data-line-number="50"><span class="co">#&gt; &quot;rand()&quot; &quot;rand()&quot; &quot;rand()&quot; &quot;rand()&quot; &quot;rand()&quot; </span></a>
 <a class="sourceLine" id="cb1-51" data-line-number="51"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb1-52" data-line-number="52"><span class="co">#&gt; $group00002</span></a>
-<a class="sourceLine" id="cb1-53" data-line-number="53"><span class="co">#&gt;        choice_a        choice_b        choice_c        choice_d </span></a>
-<a class="sourceLine" id="cb1-54" data-line-number="54"><span class="co">#&gt; &quot;rand_a &gt;= 0.5&quot; &quot;rand_b &gt;= 0.5&quot; &quot;rand_c &gt;= 0.5&quot; &quot;rand_d &gt;= 0.5&quot; </span></a>
-<a class="sourceLine" id="cb1-55" data-line-number="55"><span class="co">#&gt;        choice_e </span></a>
-<a class="sourceLine" id="cb1-56" data-line-number="56"><span class="co">#&gt; &quot;rand_e &gt;= 0.5&quot; </span></a>
-<a class="sourceLine" id="cb1-57" data-line-number="57"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-58" data-line-number="58"><span class="co">#&gt; $group00003</span></a>
-<a class="sourceLine" id="cb1-59" data-line-number="59"><span class="co">#&gt;                                            a_1 </span></a>
-<a class="sourceLine" id="cb1-60" data-line-number="60"><span class="co">#&gt; &quot;ifelse(choice_a, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-61" data-line-number="61"><span class="co">#&gt;                                            a_2 </span></a>
-<a class="sourceLine" id="cb1-62" data-line-number="62"><span class="co">#&gt; &quot;ifelse(choice_a, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-63" data-line-number="63"><span class="co">#&gt;                                            b_1 </span></a>
-<a class="sourceLine" id="cb1-64" data-line-number="64"><span class="co">#&gt; &quot;ifelse(choice_b, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-65" data-line-number="65"><span class="co">#&gt;                                            b_2 </span></a>
-<a class="sourceLine" id="cb1-66" data-line-number="66"><span class="co">#&gt; &quot;ifelse(choice_b, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-67" data-line-number="67"><span class="co">#&gt;                                            c_1 </span></a>
-<a class="sourceLine" id="cb1-68" data-line-number="68"><span class="co">#&gt; &quot;ifelse(choice_c, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-69" data-line-number="69"><span class="co">#&gt;                                            c_2 </span></a>
-<a class="sourceLine" id="cb1-70" data-line-number="70"><span class="co">#&gt; &quot;ifelse(choice_c, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-71" data-line-number="71"><span class="co">#&gt;                                            d_1 </span></a>
-<a class="sourceLine" id="cb1-72" data-line-number="72"><span class="co">#&gt; &quot;ifelse(choice_d, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-73" data-line-number="73"><span class="co">#&gt;                                            d_2 </span></a>
-<a class="sourceLine" id="cb1-74" data-line-number="74"><span class="co">#&gt; &quot;ifelse(choice_d, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-75" data-line-number="75"><span class="co">#&gt;                                            e_1 </span></a>
-<a class="sourceLine" id="cb1-76" data-line-number="76"><span class="co">#&gt; &quot;ifelse(choice_e, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
-<a class="sourceLine" id="cb1-77" data-line-number="77"><span class="co">#&gt;                                            e_2 </span></a>
-<a class="sourceLine" id="cb1-78" data-line-number="78"><span class="co">#&gt; &quot;ifelse(choice_e, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-53" data-line-number="53"><span class="co">#&gt;        choice_a        choice_b        choice_c        choice_d        choice_e </span></a>
+<a class="sourceLine" id="cb1-54" data-line-number="54"><span class="co">#&gt; &quot;rand_a &gt;= 0.5&quot; &quot;rand_b &gt;= 0.5&quot; &quot;rand_c &gt;= 0.5&quot; &quot;rand_d &gt;= 0.5&quot; &quot;rand_e &gt;= 0.5&quot; </span></a>
+<a class="sourceLine" id="cb1-55" data-line-number="55"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-56" data-line-number="56"><span class="co">#&gt; $group00003</span></a>
+<a class="sourceLine" id="cb1-57" data-line-number="57"><span class="co">#&gt;                                            a_1 </span></a>
+<a class="sourceLine" id="cb1-58" data-line-number="58"><span class="co">#&gt; &quot;ifelse(choice_a, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-59" data-line-number="59"><span class="co">#&gt;                                            a_2 </span></a>
+<a class="sourceLine" id="cb1-60" data-line-number="60"><span class="co">#&gt; &quot;ifelse(choice_a, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-61" data-line-number="61"><span class="co">#&gt;                                            b_1 </span></a>
+<a class="sourceLine" id="cb1-62" data-line-number="62"><span class="co">#&gt; &quot;ifelse(choice_b, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-63" data-line-number="63"><span class="co">#&gt;                                            b_2 </span></a>
+<a class="sourceLine" id="cb1-64" data-line-number="64"><span class="co">#&gt; &quot;ifelse(choice_b, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-65" data-line-number="65"><span class="co">#&gt;                                            c_1 </span></a>
+<a class="sourceLine" id="cb1-66" data-line-number="66"><span class="co">#&gt; &quot;ifelse(choice_c, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-67" data-line-number="67"><span class="co">#&gt;                                            c_2 </span></a>
+<a class="sourceLine" id="cb1-68" data-line-number="68"><span class="co">#&gt; &quot;ifelse(choice_c, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-69" data-line-number="69"><span class="co">#&gt;                                            d_1 </span></a>
+<a class="sourceLine" id="cb1-70" data-line-number="70"><span class="co">#&gt; &quot;ifelse(choice_d, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-71" data-line-number="71"><span class="co">#&gt;                                            d_2 </span></a>
+<a class="sourceLine" id="cb1-72" data-line-number="72"><span class="co">#&gt; &quot;ifelse(choice_d, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-73" data-line-number="73"><span class="co">#&gt;                                            e_1 </span></a>
+<a class="sourceLine" id="cb1-74" data-line-number="74"><span class="co">#&gt; &quot;ifelse(choice_e, \&quot;treatment\&quot;, \&quot;control\&quot;)&quot; </span></a>
+<a class="sourceLine" id="cb1-75" data-line-number="75"><span class="co">#&gt;                                            e_2 </span></a>
+<a class="sourceLine" id="cb1-76" data-line-number="76"><span class="co">#&gt; &quot;ifelse(choice_e, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot;</span></a></code></pre></div>
 <p>Notice <code>seplyr::partition_mutate_qt()</code> split the work into 3 groups. The straightforward method (with no statement re-ordering) of splitting into non-dependent groups would have to split the mutate at each first use of a new value: yielding 10 splits or 11 mutate stages. For why a low number of execution stages is important please see <a href="http://winvector.github.io/FluidData/partition_mutate.html">here</a>.</p>
 <p>To execute the statements on a data-item “<code>d</code>” (either an in-memory <code>data.frame</code> or a remote database or <code>Sparklyr</code> handle) we would do something like the following:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">res &lt;-<span class="st"> </span><span class="kw">mutate_seb</span>(d, plan)</a></code></pre></div>
@@ -502,6 +500,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb3-104" data-line-number="104"><span class="co">#&gt;                                          e_2 </span></a>
 <a class="sourceLine" id="cb3-105" data-line-number="105"><span class="co">#&gt; &quot;ifelse(choice, \&quot;control\&quot;, \&quot;treatment\&quot;)&quot;</span></a></code></pre></div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

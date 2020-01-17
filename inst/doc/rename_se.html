@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2019-07-24" />
+<meta name="date" content="2020-01-16" />
 
 <title>rename_se</title>
 
@@ -96,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -303,7 +303,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">rename_se</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2019-07-24</h4>
+<h4 class="date">2020-01-16</h4>
 
 
 
@@ -314,20 +314,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-3" data-line-number="3">datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">cylinders =</span> cyl, <span class="dt">gears =</span> gear) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw">head</span>()</a></code></pre></div>
-<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
-## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
-## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
-## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4
-## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3
-## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3
-## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3
-##                   carb
-## Mazda RX4            4
-## Mazda RX4 Wag        4
-## Datsun 710           1
-## Hornet 4 Drive       1
-## Hornet Sportabout    2
-## Valiant              1</code></pre>
+<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears carb
+## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4    4
+## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4    4
+## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4    1
+## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3    1
+## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3    2
+## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3    1</code></pre>
 <p>Notice <code>dplyr::rename()</code> renamings are written as assignments making them very similar to <code>dplyr::mutate()</code>. This is the reverse from how <code>R</code> usually handles list or mapping structures. In named vectors or named lists keys are written on the left and values are written on the right as follows.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cyl&quot;</span> =<span class="st"> &quot;cylinders&quot;</span>, <span class="st">&quot;gear&quot;</span> =<span class="st"> &quot;gears&quot;</span>)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">print</span>(mp)</a></code></pre></div>
@@ -339,20 +332,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb5-3" data-line-number="3">datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) <span class="op">%.&gt;%</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">head</span>(.)</a></code></pre></div>
-<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears
-## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4
-## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4
-## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4
-## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3
-## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3
-## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3
-##                   carb
-## Mazda RX4            4
-## Mazda RX4 Wag        4
-## Datsun 710           1
-## Hornet 4 Drive       1
-## Hornet Sportabout    2
-## Valiant              1</code></pre>
+<pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears carb
+## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4    4
+## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4    4
+## Datsun 710        22.8         4  108  93 3.85 2.320 18.61  1  1     4    1
+## Hornet 4 Drive    21.4         6  258 110 3.08 3.215 19.44  1  0     3    1
+## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3    2
+## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3    1</code></pre>
 <p>We hope this makes it easy to translate one-off analyses into re-usable scripts by incrementally replacing known variable names with parametric versions. The <code>:=</code> operator is just a convenience function for building up maps, we could also have written <code>rename_se(c(&quot;cylinders&quot; = &quot;cyl&quot;, &quot;gears&quot; = &quot;gear&quot;))</code> or passed in a named vector built up elsewhere.</p>
 <p><code>rename_se</code> interprets all left-hand names as new column names and all right-hand names as old column names. This allows <code>rename_se</code> to be used to swap columns:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>) <span class="op">%.&gt;%</span></a>
@@ -361,6 +347,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## 1 1 2</code></pre>
 <p>Please see <a href="https://winvector.github.io/wrapr/reference/dot_arrow.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

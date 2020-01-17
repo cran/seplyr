@@ -1,10 +1,10 @@
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #     install.packages('seplyr')
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #     devtools::install_github('WinVector/seplyr')
 
-## ----ex1a----------------------------------------------------------------
+## ----ex1a---------------------------------------------------------------------
 suppressPackageStartupMessages(library("dplyr"))
 packageVersion("dplyr")
 
@@ -12,7 +12,7 @@ datasets::mtcars %>%
   arrange(cyl, desc(gear)) %>% 
   head()
 
-## ----ex1b----------------------------------------------------------------
+## ----ex1b---------------------------------------------------------------------
 # Assume this is set elsewhere,
 # supplied by a user, function argument, or control file.
 orderTerms <- c('cyl', 'desc(gear)')
@@ -30,14 +30,14 @@ datasets::mtcars %>%
   arrange(!!!orderQs) %>% 
   head()
 
-## ----ex1c----------------------------------------------------------------
+## ----ex1c---------------------------------------------------------------------
 library("seplyr")
 
 datasets::mtcars %.>% 
   arrange_se(., orderTerms) %>% 
   head(.)
 
-## ----atexse--------------------------------------------------------------
+## ----atexse-------------------------------------------------------------------
 datasets::iris %.>%
   group_by_se(., "Species") %.>%
   summarize_se(., c("Mean.Sepal.Length" := "mean(Sepal.Length)", 

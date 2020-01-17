@@ -1,4 +1,4 @@
-## ----exi-----------------------------------------------------------------
+## ----exi----------------------------------------------------------------------
 suppressPackageStartupMessages(library("dplyr"))
 packageVersion("dplyr")
 
@@ -10,7 +10,7 @@ starwars %>%
             mean_mass = mean(mass, na.rm = TRUE),
             count = n()) 
 
-## ----exc-----------------------------------------------------------------
+## ----exc----------------------------------------------------------------------
 library("seplyr")
 
 starwars %>%
@@ -19,7 +19,7 @@ starwars %>%
                  "mean_mass" := "mean(mass, na.rm = TRUE)",
                  "count" := "n()"))
 
-## ----exp3----------------------------------------------------------------
+## ----exp3---------------------------------------------------------------------
 grouped_mean <- function(data, 
                          grouping_variables, 
                          value_variables,
@@ -41,7 +41,7 @@ starwars %>%
   grouped_mean(grouping_variables = c("eye_color", "skin_color"),
                value_variables = c("mass", "birth_year"))
 
-## ----rlde1---------------------------------------------------------------
+## ----rlde1--------------------------------------------------------------------
 packageVersion("dplyr")
 packageVersion("rlang")
 packageVersion("tidyselect")
@@ -52,31 +52,31 @@ starwars %>%
   group_by(.data[[my_var]]) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rlde2---------------------------------------------------------------
+## ----rlde2--------------------------------------------------------------------
 # wrong
 starwars %>%
   group_by(!!my_var) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rlde3---------------------------------------------------------------
+## ----rlde3--------------------------------------------------------------------
 # correct, or at least appears to work
 starwars %>%
   group_by(!!rlang::sym(my_var)) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rlde4---------------------------------------------------------------
+## ----rlde4--------------------------------------------------------------------
 # correct, or at least appears to work
 starwars %>%
   group_by(.data[[!!my_var]]) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rlde5, error=TRUE---------------------------------------------------
+## ----rlde5, error=TRUE--------------------------------------------------------
 # errors-out
 starwars %>%
   group_by(.data[[!!rlang::sym(my_var)]]) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rdse1, error=TRUE---------------------------------------------------
+## ----rdse1, error=TRUE--------------------------------------------------------
 # correct, or at least appears to work
 starwars %>%
   select(my_var) %>%
@@ -87,7 +87,7 @@ starwars %>%
   group_by(my_var) %>%
   head(n=2)
 
-## ----rdsel2, error=TRUE--------------------------------------------------
+## ----rdsel2, error=TRUE-------------------------------------------------------
 my_var <- "homeworld"
 # selects height column
 starwars %>%
@@ -108,12 +108,12 @@ starwars_plus %>%
   group_by(.data[[my_var]]) %>%
   summarise_at(vars(height:mass), mean, na.rm = TRUE)
 
-## ----rlangu--------------------------------------------------------------
+## ----rlangu-------------------------------------------------------------------
 starwars %>%
   select(!!my_var) %>%
   head(n=2)
 
-## ----sesel---------------------------------------------------------------
+## ----sesel--------------------------------------------------------------------
 print(my_var)
 
 # selects homeworld column (the value specified my_var) independent of
