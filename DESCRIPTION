@@ -2,8 +2,8 @@ Package: seplyr
 Type: Package
 Title: Improved Standard Evaluation Interfaces for Common Data
         Manipulation Tasks
-Version: 0.8.7
-Date: 2020-05-13
+Version: 0.8.8
+Date: 2020-05-23
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -25,15 +25,15 @@ Description: The 'seplyr' (standard evaluation plying) package supplies improved
 License: GPL-2 | GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.4.0), wrapr (>= 2.0.0)
-Imports: dplyr (>= 0.8.5), rlang, tidyr, datasets
+Imports: dplyr (>= 0.8.5), rlang, tidyr
 LazyData: true
 RoxygenNote: 7.1.0
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 ByteCompile: true
 NeedsCompilation: no
-Packaged: 2020-05-13 14:32:04 UTC; johnmount
+Packaged: 2020-05-24 00:38:38 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2020-05-13 14:50:03 UTC
+Date/Publication: 2020-05-24 04:50:02 UTC
