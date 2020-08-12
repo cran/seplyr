@@ -12,17 +12,33 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2020-05-23" />
+<meta name="date" content="2020-08-12" />
 
 <title>rename_se</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,14 +48,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -301,17 +319,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rename_se</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2020-05-23</h4>
+<h4 class="date">2020-08-12</h4>
 
 
 
 <p><a href="https://github.com/WinVector/seplyr"><code>seplyr</code></a> is an attempt to work with the <a href="https://CRAN.R-project.org/package=dplyr"><code>dplyr</code> <code>0.7.*</code></a> <a href="https://www.r-project.org"><code>R</code></a> package through standard evaluation interfaces with a minimum of change and minimum of cognitive friction. Beyond championing standard evaluation it attempts to introduce as few of its own opinions as possible.</p>
 <p>A case in point is <code>dplyr::rename()</code>/<code>seplyr::rename_se()</code>. <code>dplyr::rename()</code> is used as follows.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">cylinders =</span> cyl, <span class="dt">gears =</span> gear) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw">head</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>))</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>datasets<span class="op">::</span>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">cylinders =</span> cyl, <span class="dt">gears =</span> gear) <span class="op">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears carb
 ## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4    4
 ## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4    4
@@ -320,16 +338,16 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## Hornet Sportabout 18.7         8  360 175 3.15 3.440 17.02  0  0     3    2
 ## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3    1</code></pre>
 <p>Notice <code>dplyr::rename()</code> renamings are written as assignments making them very similar to <code>dplyr::mutate()</code>. This is the reverse from how <code>R</code> usually handles list or mapping structures. In named vectors or named lists keys are written on the left and values are written on the right as follows.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cyl&quot;</span> =<span class="st"> &quot;cylinders&quot;</span>, <span class="st">&quot;gear&quot;</span> =<span class="st"> &quot;gears&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">print</span>(mp)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cyl&quot;</span> =<span class="st"> &quot;cylinders&quot;</span>, <span class="st">&quot;gear&quot;</span> =<span class="st"> &quot;gears&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">print</span>(mp)</span></code></pre></div>
 <pre><code>##         cyl        gear 
 ## &quot;cylinders&quot;     &quot;gears&quot;</code></pre>
 <p>Because <code>seplyr</code> is intended to be a set of adapters for <code>dplyr</code> we simply adopt <code>dplyr::rename()</code>’s convention. This allows the user to mechanically translate their experience and expectations from scripting over <code>dplyr::rename()</code> to directly use <code>seplyr::rename_se()</code> as follows.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">head</span>(.)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(<span class="st">&quot;seplyr&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>datasets<span class="op">::</span>mtcars <span class="op">%.&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&quot;cylinders&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;gears&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> &quot;gear&quot;</span>)) <span class="op">%.&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="st">  </span><span class="kw">head</span>(.)</span></code></pre></div>
 <pre><code>##                    mpg cylinders disp  hp drat    wt  qsec vs am gears carb
 ## Mazda RX4         21.0         6  160 110 3.90 2.620 16.46  0  1     4    4
 ## Mazda RX4 Wag     21.0         6  160 110 3.90 2.875 17.02  0  1     4    4
@@ -339,8 +357,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## Valiant           18.1         6  225 105 2.76 3.460 20.22  1  0     3    1</code></pre>
 <p>We hope this makes it easy to translate one-off analyses into re-usable scripts by incrementally replacing known variable names with parametric versions. The <code>:=</code> operator is just a convenience function for building up maps, we could also have written <code>rename_se(c(&quot;cylinders&quot; = &quot;cyl&quot;, &quot;gears&quot; = &quot;gear&quot;))</code> or passed in a named vector built up elsewhere.</p>
 <p><code>rename_se</code> interprets all left-hand names as new column names and all right-hand names as old column names. This allows <code>rename_se</code> to be used to swap columns:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">c</span>(<span class="st">'b'</span>, <span class="st">'a'</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>) <span class="op">%.&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">rename_se</span>(., <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;b&#39;</span>, <span class="st">&#39;a&#39;</span>))</span></code></pre></div>
 <pre><code>##   b a
 ## 1 1 2</code></pre>
 <p>Please see <a href="https://winvector.github.io/wrapr/reference/dot_arrow.html"><code>help(&quot;%.&gt;%&quot;, package=&quot;wrapr&quot;)</code></a> for details on “dot pipe.”</p>
