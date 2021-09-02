@@ -17,19 +17,6 @@ datasets::mtcars %>%
 # supplied by a user, function argument, or control file.
 orderTerms <- c('cyl', 'desc(gear)')
 
-# Now convert into splice-able types, the idea is the user
-# supplies variable names that we later convert to "quosures"
-# for use in `dplyr` 0.7.* generic code.
-# This code is near the pipe under the rule:
-# "If you are close enough to form a quosure, 
-#  you are close enough to re-code the analysis"
-orderQs <- lapply(orderTerms,
-                  function(si) { rlang::parse_expr(si) })
-# pipe
-datasets::mtcars %>% 
-  arrange(!!!orderQs) %>% 
-  head()
-
 ## ----ex1c---------------------------------------------------------------------
 library("seplyr")
 
